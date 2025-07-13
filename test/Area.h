@@ -68,11 +68,12 @@ class NewAreaList
 protected:
 	vector<NewArea*> coll;
 	int size;
-	int & screen_x;
+	int screen_x;
+	int len;
 	HeroMoveAttribute * hero;
 	bool islink;
 public:
-	NewAreaList(int & screenx,int length);
+	NewAreaList(int length);
 	void add_Barrier(int x,int y,int index);
 	void add_Enermy(int x, int y, int index);
 	void add_Salesman(int x, int y, int index,Salesman* vill);
@@ -81,9 +82,9 @@ public:
 	bool isLink() { return islink; }
 	int& get_screen_x() { return screen_x; };
 	void link(HeroMoveAttribute*);
-	
+	int get_len() { return len; };
+	//int& get_screen_x() { return screen_x; };
 };
-
 
 
 

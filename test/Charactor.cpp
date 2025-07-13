@@ -13,10 +13,10 @@ void putimage_alpha(int x, int y, IMAGE* img)
 void HeroMoveAttribute::link(NewAreaList* temp) {
 	islink = true;
 	this->m = temp;
-	if (m->isLink())
-	{
-		return;
-	}
+	//if (m->isLink())
+	//{
+	//	return;
+	//}
 	m->link(this);
 };
 void HeroMoveAttribute::move()
@@ -43,6 +43,13 @@ void HeroMoveAttribute::move()
 		x += screen_x;
 		x = x < 0 ? 0 : x;
 		screen_x = 0;
+	}
+	int end = m->get_len() - AREASIZE + 50;
+	if (screen_x > end )
+	{
+		x += screen_x - end;
+		x = x < 0 ? 0 : x;
+		screen_x = end;
 	}
 	if (m->Meet())
 	{
@@ -179,7 +186,20 @@ void HeroMoveAttribute::set_body(Hero* temp)
 	body = temp;
 	body->link_attr(this);
 }
-
+bool HeroMoveAttribute::win(int end)
+{
+	int& screen_x = m->get_screen_x();
+	if (screen_x + x > end)
+	{
+		return 1;
+	}
+	return 0;
+}
+void HeroMoveAttribute::position_clear()
+{
+	x = 0;
+	y = 0;
+}
 static int screen2ph(int x, int screen_x)
 {
 	return x + screen_x;

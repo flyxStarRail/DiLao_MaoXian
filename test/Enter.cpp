@@ -3,6 +3,7 @@
 
 void Enter::enter()
 {
+	Resize(NULL, 600, 600);
 	bool running = true;
 	int x = 0;
 	int y = 0;
@@ -72,4 +73,86 @@ int Enter::judge(int x,int y)
 		return 2;
 	}
 	return 0;
+}
+
+void Win::draw()
+{
+	cleardevice();
+	setfillcolor(RGB(255,216,0));
+	fillrectangle(0, 0, 600, 600);
+	setfillcolor(WHITE);
+	setbkmode(TRANSPARENT);
+	settextstyle(50, 45, "黑体");
+
+	settextcolor(RED);
+	outtextxy(135, 100, _T("YOU WIN"));
+	settextcolor(BLACK);
+	fillrectangle(300 - 150, 300, 150 + 300, 400);
+	outtextxy(215, 325, _T("Back"));
+	fillrectangle(300 - 150, 450, 150 + 300, 550);
+	outtextxy(210, 475, _T("Exit"));
+}
+
+void Win::enter()
+{
+	Resize(NULL, 600, 600);
+	bool running = true;
+	int x = 0;
+	int y = 0;
+	ExMessage msg;
+	BeginBatchDraw();
+
+
+	while (running)
+	{
+		DWORD beginTime = GetTickCount();			// 记录循环开始时间
+
+		// 消息处理
+		while (peekmessage(&msg))
+		{
+			if (msg.message == WM_LBUTTONDOWN) {		// 左键按下圆变红色
+				x = msg.x;
+				y = msg.y;
+				int flag = judge(x, y);
+				switch (flag)
+				{
+				case 1:
+					return;
+					break;
+				}
+			}
+		}
+		cleardevice();								// 清除屏幕
+		draw();
+
+		FlushBatchDraw();
+		// 帧延时
+		DWORD endTime = GetTickCount();				// 记录循环结束时间
+		DWORD elapsedTime = endTime - beginTime;	// 计算循环耗时
+		if (elapsedTime < 1000 / 60)				// 按每秒60帧进行补时
+			Sleep(1000 / 60 - elapsedTime);
+	}
+
+	EndBatchDraw();
+	return;
+}
+int Win::judge(int x, int y)
+{
+
+	if (x > 150 && x < 450 && y>450 && y < 550)
+	{
+		exit(0);
+	}
+	if (x > 150 && x < 450 && y>300 && y < 400)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+void Failed::draw()
+{
+	cleardevice();
+	settextstyle(80, 50, "宋体");
+	outtextxy(150, 300, _T("FAILED"));
 }

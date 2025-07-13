@@ -48,11 +48,11 @@ bool NewArea::Meet(int x, int y, HeroMoveAttribute* hero)
 	return false;
 }
 
-NewAreaList::NewAreaList(int& screenx, int length)
-	:screen_x(screenx), islink(false)
+NewAreaList::NewAreaList(int length)
+	:islink(false),len(length),screen_x(0)
 {
 	size = (length + AREASIZE - 1) / AREASIZE;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i <= size; i++)
 	{
 		coll.push_back(new NewArea(screen_x, i));
 	}
@@ -60,21 +60,33 @@ NewAreaList::NewAreaList(int& screenx, int length)
 
 void NewAreaList::add_Barrier(int x, int y, int index)
 {
+	if (index * AREASIZE + x * 40 >= len)
+	{
+		return;
+	}
 	coll[index]->add_Barrier(x, y);
 }
 void MapList::add_Enermy(int x, int y, int index)
 {
+	if (index * AREASIZE + x * 40 >= len)
+	{
+		return;
+	}
 	coll[index]->add_Enermy(x, y);
 }
 void MapList::add_Salesman(int x, int y, int index, Salesman* vill)
 {
+	if (index * AREASIZE + x * 40 >= len)
+	{
+		return;
+	}
 	coll[index]->add_Salesman(x, y, vill);
 }
 
 void NewAreaList::load(int num)
 {
 	if (num != 0)	coll[num - 1]->print();
-	coll[num]->print();
+	if (num != size) coll[num]->print();
 	if (num + 1 != size)	coll[num + 1]->print();
 }
 
@@ -111,10 +123,10 @@ bool NewAreaList::Meet()
 void NewAreaList::link(HeroMoveAttribute* temp) {
 	hero = temp;
 	islink = true;
-	if (!(hero->isLink()))
-	{
-		hero->link(this);
-	}
+	//if (!(hero->isLink()))
+	//{
+	//	hero->link(this);
+	//}
 };
 
 

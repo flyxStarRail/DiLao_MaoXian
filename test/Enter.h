@@ -8,3 +8,16 @@ public:
 	static void draw();
 };
 
+class Win
+{
+public:
+	static void enter();
+	static void draw();
+	static int judge(int x,int y);
+};
+
+class Failed
+{
+public:
+	static void draw();
+};

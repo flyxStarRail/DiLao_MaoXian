@@ -67,6 +67,8 @@ void Shop::buyoperation(int x, int y)
 	//如果没有点击到装备，则会运行到这里
 }
 
+
+
 void Shop::selloperation(int x, int y)
 {
 	//此函数表示出售界面中，判断是否出售并进行操作的函数
@@ -101,10 +103,16 @@ void Shop::selloperation(int x, int y)
 		}
 	}
 }
-void Shop::product_draw(bool product_flag)
+void Shop::product_draw(bool product_flag,Hero* hero)
 {
-	//此函数为绘制商店的物品
 	cleardevice();
+	char temp[20];
+	sprintf_s(temp, "Gold:%d",hero->getGold());
+	settextstyle(10, 10, "黑体");
+	settextcolor(WHITE);
+	outtextxy(10, 10, temp);
+	//此函数为绘制商店的物品
+
 	int index = 1;
 	int index_c = 1;
 	for (int i = 0; i < min(p.size(), 10); i++)
@@ -127,7 +135,7 @@ void Shop::product_draw(bool product_flag)
 	}
 	settextstyle(40, 40, "Courier");
 	outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
-	FlushBatchDraw();
+	//FlushBatchDraw();
 }
 
 int Shop::ShopEnter(Hero* hero)
@@ -195,15 +203,22 @@ int Shop::SELL_Enter(Hero* hero)
 	bool running = true;
 	ExMessage msg;
 	FlushBatchDraw();
+	Props* Prop_choose = NULL;
 
 	while (running) {
 		// 消息处理	
 		DWORD beginTime = GetTickCount();	
 		while (peekmessage(&msg)) {
+			if (msg.message == WM_MOUSEMOVE)
+			{
+				cout << "SELL";
+				x = msg.x;
+				y = msg.y;
+				Prop_choose = choose(x, y, true);
+			}
 			if (msg.message == WM_LBUTTONDOWN) {
 				x = msg.x;
 				y = msg.y;
-				std::cout << x << '\n' << y << std::endl;
 				selloperation(x, y);
 				int flag = getoperation(x, y);
 				switch (flag)
@@ -217,7 +232,9 @@ int Shop::SELL_Enter(Hero* hero)
 
 		}
 		// 绘图
-		product_draw(1);
+		product_draw(1,hero);
+		if (Prop_choose)		draw_Props(Prop_choose, x, y);
+		FlushBatchDraw();
 		DWORD endTime = GetTickCount();				// 记录循环结束时间
 		DWORD elapsedTime = endTime - beginTime;	// 计算循环耗时
 		if (elapsedTime < 1000 / 60)				// 按每秒60帧进行补时
@@ -234,11 +251,19 @@ int Shop::BUY_Enter(Hero* hero)
 	int y = 0;						
 	bool running = true;
 	ExMessage msg;
+	Props* Prop_choose = NULL;
+
 	FlushBatchDraw();
 
 	while (running) {
 		DWORD beginTime = GetTickCount();
 		while (peekmessage(&msg)) {
+			if (msg.message == WM_MOUSEMOVE)
+			{
+				x = msg.x;
+				y = msg.y;
+				Prop_choose = choose(x,y,false);
+			}
 			if (msg.message == WM_LBUTTONDOWN) //鼠标左键单击时
 			{
 				x = msg.x;
@@ -258,7 +283,8 @@ int Shop::BUY_Enter(Hero* hero)
 
 		}
 		// 绘图
-		product_draw(0);
+		product_draw(0,hero);
+		if(Prop_choose)		draw_Props(Prop_choose,x,y);
 		settextstyle(40, 40, "Courier");
 		outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
 		FlushBatchDraw();				// 刷新批量绘图
@@ -274,3 +300,55 @@ int Shop::BUY_Enter(Hero* hero)
 //{
 //	//loadimage(img, temp, ITEMSIZE, ITEMSIZE,false);
 //}
+
+Props* Shop::choose(int x, int y, bool flag)
+{
+	int index = 1;
+	int index_c = 1;
+	int item_x1, item_y1;
+	int item_x2, item_y2;
+	//cout << "choose";
+	for (int i = 0; i < min(p.size(), 10); i++)
+	{
+		if (p[i]->getflag()==flag)
+		{
+
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
+			item_y1 = 100 * index_c;
+			item_x2 = item_x1 + ITEMSIZE;
+			item_y2 = item_y1 + ITEMSIZE;
+			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
+			{
+				//P[i]为出售的装备
+				//p[i]->changeflag();
+				cout << i << endl;
+				return p[i];
+			}
+			index++;
+			if (index == 6)
+			{
+				index = 1;
+				index_c++;
+			}
+		}
+	}
+	return NULL;
+}
+
+void Shop::draw_Props(Props* temp,int x,int y)
+{
+	x = 200;
+	y = 10;
+	cout << temp->getPrice();
+	setbkcolor(RGB(100, 100, 100));
+	settextcolor(WHITE);
+	settextstyle(10, 10, "黑体");
+	char t[20];
+	sprintf_s(t,"price:%d", (temp->getPrice()));
+	outtextxy(x, y, t); 
+	sprintf_s(t, "ATK:%d",temp->get_data());
+	outtextxy(x, y+10, t);
+	//sprintf_s(t, "price:%d", (temp->getPrice()));
+	//outtextxy(x, y, t);
+	setbkcolor(BLACK);
+}

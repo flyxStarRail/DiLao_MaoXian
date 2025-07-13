@@ -44,7 +44,9 @@ public:
 	void add_product(Props*);//商店添加产品
 	void buyoperation(int, int);//判断点击的位置是否购买
 	void selloperation(int, int);//判断点击的位置是否出售
-	void product_draw(bool);//绘制商品界面
+	void product_draw(bool,Hero*);//绘制商品界面
+	Props* choose(int,int,bool);
+	void draw_Props(Props*,int,int);
 protected:
 	vector<Props*> p;//商品向量
 };

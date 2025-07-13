@@ -40,6 +40,7 @@ public:
     virtual ~Props() {};
     int getPrice() const { return price; }
     void set_img(IMAGE* temp) { img = temp;};
+    int get_data() { return data; };
     virtual void getInfo() const = 0;
     virtual void function(class Hero& hero) = 0; // 物品效果
     IMAGE* getimage() { return img; };

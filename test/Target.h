@@ -81,6 +81,7 @@ public:
     void setGold(int g) { gold = g; }
     HeroMoveAttribute* getattr() { return attr; };
     void print();
+    bool win(int end);
 };
 
 // µ–»À¿‡

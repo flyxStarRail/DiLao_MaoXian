@@ -70,3 +70,7 @@ void Hero::print()
     _stprintf_s(buf, _T("DEF: %d"), def);
     outtextxy(10, 670, buf);
 }
+bool Hero::win(int end)
+{
+    return attr->win(end);
+}

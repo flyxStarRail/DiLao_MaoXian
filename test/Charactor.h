@@ -55,6 +55,8 @@ public:
 	{
 		isLeft = isRight = isDown = isUp = isMove = isSpeed = 0 ;
 	};
+	bool win(int end);
+	void position_clear();
 };
 
 //下面的类暂未写好
