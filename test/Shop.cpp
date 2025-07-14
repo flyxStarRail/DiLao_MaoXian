@@ -10,9 +10,9 @@ void Shop::add_product(Props* temp)
 	{
 		//如果传参为空指针则添加空对象
 		//还没有写析构函数
-		temp = new Weapon(1,100);
-		temp->set_img(new IMAGE);
-		p.push_back(temp);
+		Weapon temp(10,100);
+		temp.set_img(new IMAGE);
+		p.push_back(&temp);
 	}
 	else
 	{
@@ -30,7 +30,7 @@ static int getoperation(int x, int y)
 	}
 	return 4;
 }
-void Shop::buyoperation(int x, int y)
+void Shop::buyoperation(int x, int y,Hero * hero)
 {
 	//此函数表示购买界面中，判断是否购买并进行操作的函数
 	//可封装成 返回值为 int 的函数来传递购买的装备的下标
@@ -51,8 +51,13 @@ void Shop::buyoperation(int x, int y)
 			{
 				//P[i]为购买的装备
 				//此处表示判定是否为点击到的装备。
-				p[i]->changeflag();
-				cout << i << endl;
+				//if()
+				if(p[i]->is_vailed(hero))
+				{
+					p[i]->changeflag();
+					p[i]->function(*hero);
+					p[i]->buy(hero);
+				}
 				//若购买装备，运行到此处停止
 				return;
 			}
@@ -91,7 +96,6 @@ void Shop::selloperation(int x, int y)
 			{
 				//P[i]为出售的装备
 				p[i]->changeflag();
-				cout << i << endl;
 				return;
 			}
 			index++;
@@ -157,7 +161,6 @@ int Shop::ShopEnter(Hero* hero)
 				x = msg.x;
 				y = msg.y;
 				//注释掉的内容为测试时使用，来显示得到的x y
-				//std::cout << x << '\n' << y << std::endl;
 				int flag = getoperation(x, y);
 				//flag 用来 判断 得到的 接下来该做什么
 				switch (flag)
@@ -171,7 +174,9 @@ int Shop::ShopEnter(Hero* hero)
 					BUY_Enter(hero);
 					break;
 				case 2:
-					SELL_Enter(hero);
+					//SELL_Enter(hero);
+					cout<<"Enter Sale";
+					SellItem::New_Sell_Enter(hero);
 					break;
 				default:
 					break;
@@ -211,7 +216,6 @@ int Shop::SELL_Enter(Hero* hero)
 		while (peekmessage(&msg)) {
 			if (msg.message == WM_MOUSEMOVE)
 			{
-				cout << "SELL";
 				x = msg.x;
 				y = msg.y;
 				Prop_choose = choose(x, y, true);
@@ -269,7 +273,7 @@ int Shop::BUY_Enter(Hero* hero)
 				x = msg.x;
 				y = msg.y;
 
-				buyoperation(x, y);//判断是否购买
+				buyoperation(x, y,hero);//判断是否购买
 				int flag = getoperation(x, y);//判断是否退出
 				switch (flag)
 				{
@@ -307,7 +311,6 @@ Props* Shop::choose(int x, int y, bool flag)
 	int index_c = 1;
 	int item_x1, item_y1;
 	int item_x2, item_y2;
-	//cout << "choose";
 	for (int i = 0; i < min(p.size(), 10); i++)
 	{
 		if (p[i]->getflag()==flag)
@@ -321,7 +324,6 @@ Props* Shop::choose(int x, int y, bool flag)
 			{
 				//P[i]为出售的装备
 				//p[i]->changeflag();
-				cout << i << endl;
 				return p[i];
 			}
 			index++;
@@ -339,16 +341,186 @@ void Shop::draw_Props(Props* temp,int x,int y)
 {
 	x = 200;
 	y = 10;
-	cout << temp->getPrice();
+	setbkcolor(RGB(100, 100, 100));
+	settextcolor(WHITE);
+	settextstyle(10, 10, "黑体");
+	char t[50];
+	temp->getInfo(t, 50);
+	outtextxy(x, y, t);
+	sprintf_s(t, "price:%d", (temp->getPrice()));
+	outtextxy(x, y+10, t);
+	setbkcolor(BLACK);
+}
+
+void Shop::restart()
+{
+	for (int i = 0; i < p.size(); i++)
+	{
+		if (p[i]->getflag())
+		{
+			p[i]->changeflag();
+		}
+	}
+}
+
+void SellItem::New_Sell_Enter(Hero* hero)
+{
+	int x = 0;
+	int y = 0;
+	bool running = true;
+	ExMessage msg;
+	FlushBatchDraw();
+	int SellItem_choose = -1;
+
+	while (running) {
+		// 消息处理	
+		DWORD beginTime = GetTickCount();
+		while (peekmessage(&msg)) {
+			if (msg.message == WM_MOUSEMOVE)
+			{
+				x = msg.x;
+				y = msg.y;
+				SellItem_choose = choose(x, y);
+			}
+			if (msg.message == WM_LBUTTONDOWN) {
+				x = msg.x;
+				y = msg.y;
+				SellItem_choose = choose(x, y);
+				selloperation(SellItem_choose,hero);
+				int flag = getoperation(x, y);
+				switch (flag)
+				{
+				case 0:
+					return ;
+				default:
+					break;
+				}
+			}
+		}
+		
+		SellItem_draw(hero);
+		if (SellItem_choose != -1)		choose_draw(SellItem_choose,x,y);
+		FlushBatchDraw();
+		DWORD endTime = GetTickCount();				// 记录循环结束时间
+		DWORD elapsedTime = endTime - beginTime;	// 计算循环耗时
+		if (elapsedTime < 1000 / 60)				// 按每秒60帧进行补时
+			Sleep(1000 / 60 - elapsedTime);
+
+	}
+	return ;
+}
+
+void SellItem::choose_draw(int index,int x,int y)
+{
+	x = 200;
+	y = 10;
 	setbkcolor(RGB(100, 100, 100));
 	settextcolor(WHITE);
 	settextstyle(10, 10, "黑体");
 	char t[20];
-	sprintf_s(t,"price:%d", (temp->getPrice()));
-	outtextxy(x, y, t); 
-	sprintf_s(t, "ATK:%d",temp->get_data());
-	outtextxy(x, y+10, t);
-	//sprintf_s(t, "price:%d", (temp->getPrice()));
-	//outtextxy(x, y, t);
+	sprintf_s(t, "price:%d", price[index]);
+	outtextxy(x, y, t);
+	sprintf_s(t, "Num:%d", flag[index]);
+	outtextxy(x, y + 10, t);
+
 	setbkcolor(BLACK);
+}
+
+int SellItem::choose(int x, int y)
+{
+	int index = 1;
+	int index_c = 1;
+	int item_x1, item_y1;
+	int item_x2, item_y2;
+	for (int i = 0; i < 10; i++)
+	{
+		if (SellItem::flag[i])
+		{
+
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
+			item_y1 = 100 * index_c;
+			item_x2 = item_x1 + ITEMSIZE;
+			item_y2 = item_y1 + ITEMSIZE;
+			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
+			{
+				return i;
+			}
+			index++;
+			if (index == 6)
+			{
+				index = 1;
+				index_c++;
+			}
+		}
+	}
+	return -1;
+}
+
+void SellItem::selloperation(int index,Hero* hero)
+{
+	flag[index] --;
+	hero->setGold(hero->getGold() + price[index]);
+}
+void SellItem::add(int index)
+{
+	flag[index]++;
+}
+void SellItem::SellItem_draw( Hero* hero)
+{
+	cleardevice();
+	char temp[20];
+	sprintf_s(temp, "Gold:%d", hero->getGold());
+	settextstyle(10, 10, "黑体");
+	settextcolor(WHITE);
+	outtextxy(10, 10, temp);
+	//此函数为绘制商店的物品
+
+	int index = 1;
+	int index_c = 1;
+	for (int i = 0; i <  10; i++)
+	{
+
+		if (flag[i])
+		{
+			//setbkcolor(RGB(128, 128, 128));
+			setfillcolor(RGB(128, 128, 128));
+			fillrectangle(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index + 80, 100 * index_c + ITEMSIZE);
+			//if(i!=9)
+			//cout << img[9] <<endl;
+			 //putimage(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, img[i]);
+			//if (img[i]!=NULL)
+
+			putimage_alpha(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, img[i]);
+			//setbkcolor(BLACK);
+			index++;
+			if (index == 6)
+			{
+				index = 1;
+				index_c++;
+			}
+		}
+	}
+	settextstyle(40, 40, "Courier");
+	outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
+	//FlushBatchDraw();
+}
+
+void SellItem::init()
+{
+	char temp[50];
+	for (int i = 0; i < SELLITEM_SIZE; i++)
+	{
+		flag[i] = 1;
+		img[i] = new IMAGE;
+		sprintf_s(temp,"SellItem\\sellitem (%d).png",i);
+		loadimage(img[i], _T(temp), 80, 80, false);
+	}
+}
+
+void SellItem::restart()
+{
+	for (int i = 0; i < SELLITEM_SIZE; i++)
+	{
+		flag[i] = 0;
+	}
 }

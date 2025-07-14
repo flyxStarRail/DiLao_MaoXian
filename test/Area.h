@@ -1,7 +1,6 @@
 #pragma once
 #include "Charactor.h"
 #include "Target.h"
-//#include "Area.h"
 #define AREASIZE 600 //定义区块大小500
 
 
@@ -15,8 +14,6 @@ public:
 	NewBarrierAttribute() :Block(false) {};
 	void print(int x, int y);
 	bool interact(Hero* hero) { return false; };
-	//void change_flag() { flag = !flag; };
-	//bool getflag() { return flag; };
 };
 
 class NewArea
@@ -33,7 +30,7 @@ public:
 		{
 			for (int j = 0; j < 15; j++)
 			{
-				barr[i][j] = new NewBarrierAttribute;
+				barr[i][j] = NULL;
 			}
 		}
 	};
@@ -44,23 +41,21 @@ public:
 		}
 		barr[x][y] = new NewBarrierAttribute;
 		barr[x][y]->change_flag(); };
-	void add_Enermy(int x, int y) {
+	void add_Enermy(int x, int y,int atk = 100,int hp = 100) {
 		if (barr[x][y])
 		{
 			delete barr[x][y];
 		}
-		barr[x][y] = new Enermy(100,100);
+		barr[x][y] = new Enermy(atk,hp);
 		barr[x][y]->change_flag();
 	};
 	void add_Salesman(int x, int y,Salesman* vill) {
-		if (barr[x][y])
-		{
-			delete barr[x][y];
-		}
 		barr[x][y] = vill;
 		barr[x][y]-> change_flag();
 	};
+	void restart();
 };
+
 
 
 class NewAreaList
@@ -83,62 +78,5 @@ public:
 	int& get_screen_x() { return screen_x; };
 	void link(HeroMoveAttribute*);
 	int get_len() { return len; };
-	//int& get_screen_x() { return screen_x; };
+	void restart();
 };
-
-
-
-
-
-
-
-/*
-class BarrierAttribute
-{
-protected:
-	int x1;
-	int y1;
-	int x2;
-	int y2;
-	int block_x;
-	int block_y;
-	int AreaIndex;
-	int& screen_x;//绑定的坐标系,用于将物理坐标转换为屏幕坐标
-public:
-	BarrierAttribute(int, int, int, int, int&);
-	BarrierAttribute(int, int, int,int&);
-	void print() const;
-	int get_x1() const;
-};
-
-class BarrierList
-{
-protected:
-	vector<BarrierAttribute*> coll;
-public:
-	void load();//用来绘制障碍物
-	void add_Barrier(BarrierAttribute* temp);
-};
-
-class Area
-{
-protected:
-	BarrierList barr;
-	//EnermyList
-public:
-	void add_Barrier(BarrierAttribute*);
-	void load();
-};
-
-class AreaList
-{
-protected:
-	vector<Area*> coll;
-	int size;
-public:
-	AreaList(int);
-	~AreaList();
-	void add_Barrier(BarrierAttribute*);
-	void load(int);
-};
-*/

@@ -1,7 +1,5 @@
 #include "Area.h"
 
-
-
 void NewBarrierAttribute::print(int x, int y)
 {
 	setfillcolor(RGB(128, 128, 128));
@@ -14,10 +12,26 @@ void NewArea::print()
 	{
 		for (int j = 0; j < 15; j++)
 		{
+			if (barr[i][j] == NULL)
+			{
+				continue;
+			}
 			if (barr[i][j]->getflag())
 			{
 				barr[i][j]->print(i * 40 - screen_x + AREASIZE * index, j * 40);
-				//cout << index <<" "<< i << " " << j << '\n';
+			}
+		}
+	}
+}
+void Map::restart()
+{
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			if (barr[i][j])
+			{
+				barr[i][j]->restart();
 			}
 		}
 	}
@@ -27,22 +41,17 @@ bool NewArea::Meet(int x, int y, HeroMoveAttribute* hero)
 	int idx = (x + screen_x) / AREASIZE;
 	int x_block = ((x + screen_x) % AREASIZE) / 40;
 	int y_block = (y) / 40;
-	//cout << x_block << " " << y_block << endl;
 	if (idx != index)
 	{
 		return false;
 	}
 	if (barr[x_block][y_block] == NULL)
 	{
-		//cout << "NULL" << endl;
 		return false;
 	}
-	//return true;
 	if (barr[x_block][y_block]->getflag())
 	{
-		cout << 'THis' << x << ' ' << y << '\n';
 		barr[x_block][y_block]->interact(hero->get_body());
-		cout << true;
 		return true;
 	}
 	return false;
@@ -58,6 +67,13 @@ NewAreaList::NewAreaList(int length)
 	}
 }
 
+void MapList::restart()
+{
+	for (int i = 0; i <= size; i++)
+	{
+		coll[i]->restart();
+	}
+}
 void NewAreaList::add_Barrier(int x, int y, int index)
 {
 	if (index * AREASIZE + x * 40 >= len)
@@ -109,7 +125,6 @@ bool NewAreaList::Meet()
 		res = res || coll[num - 1]->Meet(x, y + 39, hero);
 		res = res || coll[num - 1]->Meet(x + 30, y + 39, hero);
 	}
-	//res = res || coll[num - 1]->Meet(x, y);
 	
 	if (num + 1 != size)
 	{

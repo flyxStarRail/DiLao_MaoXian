@@ -20,7 +20,6 @@ protected:
 	bool isdamaged;
 public:
 	CharactorMoveAttribute(int x = 0, int y = 0);
-
 };
 
 
@@ -58,8 +57,5 @@ public:
 	bool win(int end);
 	void position_clear();
 };
-
-//下面的类暂未写好
-
 
 void putimage_alpha(int x, int y, IMAGE* img);
