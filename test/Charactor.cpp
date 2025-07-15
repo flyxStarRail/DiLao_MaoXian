@@ -60,7 +60,6 @@ void HeroMoveAttribute::move()
 		int temp_x = temp_real_x - screen_x;
 		x = temp_x;
 		y = temp_y;
-		cout << "\nMEET\n";
 	}
 }
 
@@ -204,4 +203,3 @@ static int screen2ph(int x, int screen_x)
 {
 	return x + screen_x;
 }
-

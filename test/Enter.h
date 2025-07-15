@@ -14,6 +14,7 @@ public:
 	static void enter();
 	static void draw();
 	static int judge(int x,int y);
+	static void Animate();
 };
 
 class Failed

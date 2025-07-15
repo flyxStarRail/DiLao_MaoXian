@@ -53,6 +53,7 @@ void Enter::enter()
 
 void Enter::draw()
 {
+	setbkcolor(BLACK);
 	loadimage(NULL, _T("img\\Enter.png"), 600, 600);
 	setbkmode(TRANSPARENT);
 	setfillcolor(RGB(128, 128, 128));
@@ -78,19 +79,46 @@ int Enter::judge(int x,int y)
 void Win::draw()
 {
 	cleardevice();
-	setfillcolor(RGB(255,216,0));
-	fillrectangle(0, 0, 600, 600);
+	setbkcolor(RGB(211, 55, 52));
 	setfillcolor(WHITE);
 	setbkmode(TRANSPARENT);
 	settextstyle(50, 45, "黑体");
-
-	settextcolor(RED);
+	settextcolor(RGB(236,191,8));
 	outtextxy(135, 100, _T("YOU WIN"));
 	settextcolor(BLACK);
 	fillrectangle(300 - 150, 300, 150 + 300, 400);
 	outtextxy(215, 325, _T("Back"));
 	fillrectangle(300 - 150, 450, 150 + 300, 550);
 	outtextxy(210, 475, _T("Exit"));
+}
+
+void Win::Animate()
+{
+	bool running = true;
+	int x = -45*7;
+	while (running)
+	{
+		DWORD beginTime = GetTickCount();			// 记录循环开始时间
+
+		// 消息处理
+		setbkcolor(RGB(211, 55, 52));
+		cleardevice();
+		setfillcolor(WHITE);
+		setbkmode(TRANSPARENT);
+		settextstyle(50, 45, "黑体");
+		settextcolor(RGB(236, 191, 8));
+		outtextxy(x, 100, _T("YOU WIN"));
+		FlushBatchDraw();
+		x += 15;
+		if (x > 135) { running = false; }		
+		// 帧延时
+		DWORD endTime = GetTickCount();				// 记录循环结束时间
+		DWORD elapsedTime = endTime - beginTime;	// 计算循环耗时
+		if (elapsedTime < 1000 / 60)				// 按每秒60帧进行补时
+			Sleep(1000 / 60 - elapsedTime);
+	}
+
+	EndBatchDraw();
 }
 
 void Win::enter()
@@ -101,7 +129,7 @@ void Win::enter()
 	int y = 0;
 	ExMessage msg;
 	BeginBatchDraw();
-
+	Animate();
 
 	while (running)
 	{

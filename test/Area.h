@@ -1,7 +1,6 @@
 #pragma once
 #include "Charactor.h"
 #include "Target.h"
-//#include "Area.h"
 #define AREASIZE 600 //定义区块大小500
 
 
@@ -33,7 +32,8 @@ public:
 		{
 			for (int j = 0; j < 15; j++)
 			{
-				barr[i][j] = new NewBarrierAttribute;
+				//barr[i][j] = new NewBarrierAttribute;
+				barr[i][j] = NULL;
 			}
 		}
 	};
@@ -44,22 +44,19 @@ public:
 		}
 		barr[x][y] = new NewBarrierAttribute;
 		barr[x][y]->change_flag(); };
-	void add_Enermy(int x, int y) {
+	void add_Enermy(int x, int y,int atk = 100,int hp = 100) {
 		if (barr[x][y])
 		{
 			delete barr[x][y];
 		}
-		barr[x][y] = new Enermy(100,100);
+		barr[x][y] = new Enermy(atk,hp);
 		barr[x][y]->change_flag();
 	};
 	void add_Salesman(int x, int y,Salesman* vill) {
-		if (barr[x][y])
-		{
-			delete barr[x][y];
-		}
 		barr[x][y] = vill;
 		barr[x][y]-> change_flag();
 	};
+	void restart();
 };
 
 
@@ -83,6 +80,7 @@ public:
 	int& get_screen_x() { return screen_x; };
 	void link(HeroMoveAttribute*);
 	int get_len() { return len; };
+	void restart();
 	//int& get_screen_x() { return screen_x; };
 };
 

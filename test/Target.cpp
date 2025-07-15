@@ -7,7 +7,18 @@ void Enermy::img_init()
 }
 void  Enermy::print(int x, int y){
     putimage_alpha(x, y, img);
+    fillrectangle(x + 5, y, x + 30, y + 5);
+    setfillcolor(RED);
+    setlinestyle(PS_NULL,1);
+    fillrectangle(x + 6, y+1, x + 30*hp/full_hp, y + 5);
+    setlinestyle(0, 1);
 };
+
+void Enermy::restart()
+{
+    flag = 1;
+    hp = full_hp;
+}
 
 bool Enermy::interact(Hero* hero) {
     int damage = hero->getAtk() - def;
@@ -18,6 +29,7 @@ bool Enermy::interact(Hero* hero) {
         std::cout << "µĞÈËÒÑËÀÍö" << std::endl;
         flag = 0;
         hero->setDef(hero->getDef() + 1);
+        SellItem::add(rand() % 10);
         return true;
     }
     damage = atk - hero->getDef();
@@ -51,7 +63,10 @@ void Salesman::print(int x,int y)
 {
     putimage_alpha(x, y, img);
 }
-
+void Salesman::restart()
+{
+    shop->restart();
+}
 void Salesman::img_init()
 {
     loadimage(img, _T("img\\saleman.png"),40 ,40);

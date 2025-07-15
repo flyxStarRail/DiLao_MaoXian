@@ -131,6 +131,7 @@
     <ClCompile Include="Area.cpp" />
     <ClCompile Include="Charactor.cpp" />
     <ClCompile Include="Enter.cpp" />
+    <ClCompile Include="init.cpp" />
     <ClCompile Include="Props.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Target.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Area.h" />
     <ClInclude Include="Charactor.h" />
     <ClInclude Include="Enter.h" />
+    <ClInclude Include="init.h" />
     <ClInclude Include="Props.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shop.h" />
