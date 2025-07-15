@@ -94,6 +94,6 @@ public:
     bool sellItem(Hero* hero);
     void print(int,int);
     void restart();
-    Salesman() :Block(0){};
+    Salesman() :Block(0),shop(nullptr){};
     void static img_init();
 };
