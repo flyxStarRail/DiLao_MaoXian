@@ -14,8 +14,6 @@ public:
 	NewBarrierAttribute() :Block(false) {};
 	void print(int x, int y);
 	bool interact(Hero* hero) { return false; };
-	//void change_flag() { flag = !flag; };
-	//bool getflag() { return flag; };
 };
 
 class NewArea
@@ -32,7 +30,6 @@ public:
 		{
 			for (int j = 0; j < 15; j++)
 			{
-				//barr[i][j] = new NewBarrierAttribute;
 				barr[i][j] = NULL;
 			}
 		}
@@ -81,62 +78,4 @@ public:
 	void link(HeroMoveAttribute*);
 	int get_len() { return len; };
 	void restart();
-	//int& get_screen_x() { return screen_x; };
 };
-
-
-
-
-
-
-
-/*
-class BarrierAttribute
-{
-protected:
-	int x1;
-	int y1;
-	int x2;
-	int y2;
-	int block_x;
-	int block_y;
-	int AreaIndex;
-	int& screen_x;//绑定的坐标系,用于将物理坐标转换为屏幕坐标
-public:
-	BarrierAttribute(int, int, int, int, int&);
-	BarrierAttribute(int, int, int,int&);
-	void print() const;
-	int get_x1() const;
-};
-
-class BarrierList
-{
-protected:
-	vector<BarrierAttribute*> coll;
-public:
-	void load();//用来绘制障碍物
-	void add_Barrier(BarrierAttribute* temp);
-};
-
-class Area
-{
-protected:
-	BarrierList barr;
-	//EnermyList
-public:
-	void add_Barrier(BarrierAttribute*);
-	void load();
-};
-
-class AreaList
-{
-protected:
-	vector<Area*> coll;
-	int size;
-public:
-	AreaList(int);
-	~AreaList();
-	void add_Barrier(BarrierAttribute*);
-	void load(int);
-};
-*/

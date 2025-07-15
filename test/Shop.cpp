@@ -9,7 +9,6 @@ void Shop::add_product(Props* temp)
 	if (temp==NULL)
 	{
 		//如果传参为空指针则添加空对象
-		//还没有写析构函数
 		Weapon temp(10,100);
 		temp.set_img(new IMAGE);
 		p.push_back(&temp);
@@ -33,8 +32,6 @@ static int getoperation(int x, int y)
 void Shop::buyoperation(int x, int y,Hero * hero)
 {
 	//此函数表示购买界面中，判断是否购买并进行操作的函数
-	//可封装成 返回值为 int 的函数来传递购买的装备的下标
-	//或 返回值为 Product* 的函数来传递点击到的装备的指针
 	int index = 1;
 	int index_c = 1;
 	int item_x1, item_y1;
@@ -51,7 +48,6 @@ void Shop::buyoperation(int x, int y,Hero * hero)
 			{
 				//P[i]为购买的装备
 				//此处表示判定是否为点击到的装备。
-				//if()
 				if(p[i]->is_vailed(hero))
 				{
 					p[i]->changeflag();
@@ -77,8 +73,6 @@ void Shop::buyoperation(int x, int y,Hero * hero)
 void Shop::selloperation(int x, int y)
 {
 	//此函数表示出售界面中，判断是否出售并进行操作的函数
-	//可封装成 返回值为 int 的函数来传递出售的装备的下标
-	//或 返回值为 Product* 的函数来传递点击到的装备的指针
 	int index = 1;
 	int index_c = 1;
 	int item_x1, item_y1;
@@ -124,7 +118,6 @@ void Shop::product_draw(bool product_flag,Hero* hero)
 
 		if (p[i]->getflag()==product_flag)
 		{
-			//setbkcolor(RGB(128, 128, 128));
 			setfillcolor(RGB(128, 128, 128));
 			fillrectangle(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index + 80, 100 * index_c + ITEMSIZE);
 			putimage_alpha(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, p[i]->getimage());
@@ -139,7 +132,6 @@ void Shop::product_draw(bool product_flag,Hero* hero)
 	}
 	settextstyle(40, 40, "Courier");
 	outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
-	//FlushBatchDraw();
 }
 
 int Shop::ShopEnter(Hero* hero)
@@ -316,8 +308,6 @@ Props* Shop::choose(int x, int y, bool flag)
 			item_y2 = item_y1 + ITEMSIZE;
 			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
 			{
-				//P[i]为出售的装备
-				//p[i]->changeflag();
 				return p[i];
 			}
 			index++;
@@ -504,7 +494,7 @@ void SellItem::init()
 	char temp[50];
 	for (int i = 0; i < SELLITEM_SIZE; i++)
 	{
-		flag[i] = 1;
+		flag[i] = 0;
 		img[i] = new IMAGE;
 		sprintf_s(temp,"SellItem\\sellitem (%d).png",i);
 		loadimage(img[i], _T(temp), 80, 80, false);

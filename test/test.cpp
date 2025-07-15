@@ -117,9 +117,6 @@ restart:
 			FlushBatchDraw();
 			
 			mciSendString("play Fail wait", NULL, 0, NULL);
-			//mciSendString("play Fail", NULL, 0, NULL);
-			//Sleep(2500);
-			//*x = 0;
 			restart(ar, ar_l, index, hero, x);
 			goto restart;
 		}
@@ -131,7 +128,6 @@ restart:
 				mciSendString("close BGM", NULL, 0, NULL);
 				mciSendString("seek Win to 500", 0, 0, 0);
 				mciSendString("play Win", NULL, 0, NULL);
-				//Sleep(200);
 				Win::enter();
 				restart(ar, ar_l, index, hero, x);
 				goto restart;
