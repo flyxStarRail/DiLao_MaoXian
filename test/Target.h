@@ -7,13 +7,6 @@ using namespace std;
 
 class Hero;
 
-
-//class Target {
-//public:
-//    virtual bool interact(Hero* hero) = 0; // 纯虚交互
-//};
-
-
 class Block
 {
 protected:
@@ -29,14 +22,6 @@ public:
 };
 
 typedef Block Target;
-
-// NPC（基类，无特殊行为）
-//class NPC :virtual public Block {
-//public:
-//    bool interact(Hero* hero) override {
-//        return true;
-//    }
-//};
 
 class Person  {
 protected:

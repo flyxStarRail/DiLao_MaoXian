@@ -58,7 +58,4 @@ public:
 	void position_clear();
 };
 
-//下面的类暂未写好
-
-
 void putimage_alpha(int x, int y, IMAGE* img);
