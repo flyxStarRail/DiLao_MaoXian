@@ -4,6 +4,7 @@
 //body,hero,vill,a
 void init_Map_List(NewAreaList* ar[MAP_NUM])
 {
+
 	ar[0]->add_Barrier(0, 1, 0);
 	ar[0]->add_Barrier(0, 2, 0);
 	ar[0]->add_Barrier(0, 3, 0);
@@ -407,6 +408,7 @@ void init_Map_List(NewAreaList* ar[MAP_NUM])
 	ar[1]->add_Barrier(11, 11, 1);
 	ar[1]->add_Barrier(11, 12, 1);
 	ar[1]->add_Barrier(11, 13, 1);
+
 }
 
 void load_background(IMAGE& img, int length)

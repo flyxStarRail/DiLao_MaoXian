@@ -70,20 +70,44 @@ CharactorMoveAttribute::CharactorMoveAttribute(int x, int y)
 	step = 5;
 }
 
-HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0)
+HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0),c(0)
 {
-	isDown = isLeft = isRight = isUp = isSpeed = is_img_left = 0;
+	isDown = isLeft = isRight = isUp = isSpeed = isdamaged = isAttck = is_img_left = 0;
 	loadimage(&img[0][0], _T("img\\move_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[0][1], _T("img\\move_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[1][0], _T("img\\lmove_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[1][1], _T("img\\lmove_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 }
 
-void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a)
+void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a,int& screen_x,MapList& ar, int map_index)
 {
+	if (msg.message == WM_LBUTTONDOWN)
+	{
+		int _x = msg.x/K + screen_x;
+		int _y = msg.y/K ;
+		int temp_row = _x % 600 / 40;
+		int temp_col = _y / 40;
+		int index = _x / 600;
+		switch (c)
+		{
+		case 'E':
+		case 'e':
+			ar.erasor(temp_row, temp_col, index);
+			break;
+		case 'B':
+		case'b':
+			ar.add_Barrier(temp_row, temp_col, index);
+			break;
+		case 'Z':
+		case 'z':
+			ar.add_Enermy(temp_row, temp_col, index);
+			break;
+		}
+	}
 	//该函数用来判断此时按下的是什么键
 	if (msg.message == WM_KEYDOWN)			// 按下按键处理
 	{
+		
 		switch (msg.vkcode)
 		{
 		case 'w':
@@ -116,15 +140,16 @@ void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a)
 		case 'H':
 			isSpeed = 1;
 			break;
-		case 'b':
-		case 'B':
-			//进入商店
-			isDown = 0;			isUp = 0;			isLeft = 0;			isRight = 0;			isSpeed = 0;
-			//a.ShopEnter();
+		case 'P':
+		case 'p':
+			ar.out(map_index);
 			break;
 
 		case VK_ESCAPE:
 			running = false;
+			break;
+		default:
+			c = msg.vkcode;
 			break;
 		}
 	}

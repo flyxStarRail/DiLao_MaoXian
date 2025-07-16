@@ -13,13 +13,14 @@ protected:
     bool flag;
 public:
     Block(bool f) :flag(f) {};
-    virtual ~Block() {};
+    virtual ~Block() = 0;
     void change_flag() { flag = !flag; };
     bool getflag() { return flag; };
     virtual bool interact(Hero* hero) = 0;
     //virtual bool interactor() = 0;
     virtual void print(int x, int y) = 0;
     virtual void restart() { if (!flag) { flag = 1; } };
+    virtual void out(int ,int ,int,int) = 0;
 };
 
 typedef Block Target;
@@ -29,6 +30,8 @@ protected:
     int atk, def, hp;
 public:
     Person(int atk, int hp, int def) : atk(atk), hp(hp), def(def) {}
+    ~Person() {}
+    // 虚拟交互由子类实现
     int getAtk() const { return atk; }
     int getDef() const { return def; }
     int getHp() const { return hp; }
@@ -46,6 +49,7 @@ protected:
     int gold;
     bool is_dead = false;
     HeroMoveAttribute* attr;
+    //SellITEM* sold;
 public:
     Hero(int atk, int hp, int def = 0, int gold = 0)
         : Person(atk, hp, def), gold(gold){
@@ -72,11 +76,15 @@ protected:
     static IMAGE* img;
 public:
     Enermy(int atk, int hp, int def = 0) : Person(atk, hp, def),Block(0), full_hp(hp){};
-    ~Enermy(){}
+    ~Enermy() {};
     void print(int x, int y);
     static void img_init();
     bool interact(Hero* hero) override;
     void restart();
+    void out(int x, int y, int index,int map_index)
+    {
+        printf("ar[%d]->add_Enermy(%d,%d,%d);\n", map_index, x, y, index);
+    }
 };
 
 // 商人类
@@ -86,7 +94,6 @@ protected:
     Shop* shop;
     static IMAGE* img;
 public:
-    ~Salesman(){}
     void Enter(Hero* hero)
     {
         shop->ShopEnter(hero);
@@ -97,6 +104,10 @@ public:
     bool sellItem(Hero* hero);
     void print(int,int);
     void restart();
-    Salesman() :Block(0),shop(nullptr){};
+    Salesman() :Block(0){};
+    ~Salesman() {};
     void static img_init();
+    void out(int x, int y, int index,int map_index)
+    {
+    }
 };

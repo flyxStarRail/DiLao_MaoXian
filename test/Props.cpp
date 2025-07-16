@@ -13,9 +13,13 @@ void Props::buy(Hero* hero)
 bool Props::is_vailed(Hero* hero) {
     return (hero->getGold() >= price);
 }
+
 void PotionRecover::function(Hero& hero) {
     hero.setHp(hero.getHp() + data); // 恢复生命
 }
+//void PotionRecover::getInfo() const {
+//    std::cout << "生命恢复药水，恢复" << data << "点生命值。" << std::endl;
+//}
 void PotionRecover::getInfo(char* str, int length) const {
     int n = snprintf(str, length, "生命恢复药水，恢复%d点生命值。", data);
     if (n < 0 || n >= length) {
@@ -25,6 +29,9 @@ void PotionRecover::getInfo(char* str, int length) const {
 void Weapon::function(Hero& hero) {
     hero.setAtk(hero.getAtk() + data); // 增加攻击
 }
+//void Weapon::getInfo() const {
+//    std::cout << "武器，增加" << data << "点攻击力。" << std::endl;
+//}
 void Weapon::getInfo(char* str, int length) const {
     int n = snprintf(str, length, "武器，增加%d点攻击力。", data);
     if (n < 0 || n >= length) {
@@ -34,9 +41,17 @@ void Weapon::getInfo(char* str, int length) const {
 void Armor::function(Hero& hero) {
     hero.setDef(hero.getDef() + data); // 增加防御
 }
+//void Armor::getInfo() const {
+//    std::cout << "盔甲，增加" << data << "点防御力。" << std::endl;
+//}
 void Armor::getInfo(char* str, int length) const {
     int n = snprintf(str, length, "盔甲，增加%d点防御力。", data);
     if (n < 0 || n >= length) {
         throw std::runtime_error("Armor::getInfo: 说明信息超出最大长度");
     }
 }
+
+//int SellItem::getPrice(int id) {
+//    return price[id];
+//}
+//int SellITEM::price[10];
