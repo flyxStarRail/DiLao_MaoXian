@@ -1,7 +1,7 @@
 #pragma once
 #include "Charactor.h"
 #include "Target.h"
-#define AREASIZE 600 //定义区块大小500
+#include "Macro.h"
 
 
 
@@ -12,6 +12,7 @@ class NewBarrierAttribute
 
 public:
 	NewBarrierAttribute() :Block(false) {};
+	~NewBarrierAttribute(){}
 	void print(int x, int y);
 	bool interact(Hero* hero) { return false; };
 	//void change_flag() { flag = !flag; };
@@ -57,6 +58,20 @@ public:
 		barr[x][y]-> change_flag();
 	};
 	void restart();
+	~NewArea()
+	{
+		for (int i = 0; i < 15; i++)
+		{
+			for (int j = 0; j < 15; j++)
+			{
+				//barr[i][j] = new NewBarrierAttribute;
+				if (barr[i][j] != NULL)
+				{
+					delete barr[i][j];
+				}
+			}
+		}
+	}
 };
 
 
@@ -71,6 +86,7 @@ protected:
 	bool islink;
 public:
 	NewAreaList(int length);
+	~NewAreaList();
 	void add_Barrier(int x,int y,int index);
 	void add_Enermy(int x, int y, int index);
 	void add_Salesman(int x, int y, int index,Salesman* vill);

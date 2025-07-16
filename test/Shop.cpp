@@ -24,9 +24,9 @@ static int getoperation(int x, int y)
 	//此函数用于返回给定坐标参数对应位置得到的结果
 	if (x > SIZE / 2 - FONTSIZE * 2 && x < SIZE / 2 + FONTSIZE * 2)
 	{
-		if (y > 120 && y < 120 + FONTSIZE) { return 1;/*BUY*/ }
-		if (y > 220 && y < 220 + FONTSIZE) { return 2;/*SELL*/ }
-		if (y > 320 && y < 320 + FONTSIZE) { return 0;/*EXIT*/ }
+		if (y > 120*K && y < 120*K + FONTSIZE) { return 1;/*BUY*/ }
+		if (y > 220*K && y < 220*K + FONTSIZE) { return 2;/*SELL*/ }
+		if (y > 320*K && y < 320*K + FONTSIZE) { return 0;/*EXIT*/ }
 	}
 	return 4;
 }
@@ -43,8 +43,8 @@ void Shop::buyoperation(int x, int y,Hero * hero)
 	{
 		if (p[i]->getflag() == 0)
 		{
-			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
-			item_y1 = 100 * index_c;
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5*K - 300*K + K*100 * index;
+			item_y1 = 100*K * index_c;
 			item_x2 = item_x1 + ITEMSIZE;
 			item_y2 = item_y1 + ITEMSIZE;
 			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
@@ -88,8 +88,8 @@ void Shop::selloperation(int x, int y)
 		if (p[i]->getflag())
 		{
 
-			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
-			item_y1 = 100 * index_c;
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 * K - 300 * K + K * 100 * index;
+			item_y1 = 100 * K * index_c;
 			item_x2 = item_x1 + ITEMSIZE;
 			item_y2 = item_y1 + ITEMSIZE;
 			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
@@ -112,9 +112,9 @@ void Shop::product_draw(bool product_flag,Hero* hero)
 	cleardevice();
 	char temp[20];
 	sprintf_s(temp, "Gold:%d",hero->getGold());
-	settextstyle(10, 10, "黑体");
+	settextstyle(10*K, 10*K, "黑体");
 	settextcolor(WHITE);
-	outtextxy(10, 10, temp);
+	outtextxy(10*K, 10*K, temp);
 	//此函数为绘制商店的物品
 
 	int index = 1;
@@ -126,8 +126,8 @@ void Shop::product_draw(bool product_flag,Hero* hero)
 		{
 			//setbkcolor(RGB(128, 128, 128));
 			setfillcolor(RGB(128, 128, 128));
-			fillrectangle(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index + 80, 100 * index_c + ITEMSIZE);
-			putimage_alpha(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, p[i]->getimage());
+			fillrectangle(SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100 * index*K, 100 * index_c*K, SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100 * index*K + 80*K, 100 * index_c*K + ITEMSIZE);
+			putimage_alpha(SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100 * index*K, 100 * index_c*K, p[i]->getimage());
 			//setbkcolor(BLACK);
 			index++;
 			if (index == 6)
@@ -137,8 +137,8 @@ void Shop::product_draw(bool product_flag,Hero* hero)
 			}
 		}
 	}
-	settextstyle(40, 40, "Courier");
-	outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
+	settextstyle(BLOCKSIZE*K, BLOCKSIZE*K, "Courier");
+	outtextxy(SIZE / 2 - FONTSIZE * 2, 320*K, "EXIT");
 	//FlushBatchDraw();
 }
 
@@ -149,7 +149,7 @@ int Shop::ShopEnter(Hero* hero)
 	int x = 0;					
 	int y = 0;	
 	//change
-	Resize(NULL, 600, 500);
+	Resize(NULL, SCREENSIZE, 500*K);
 	bool running = true;
 	ExMessage msg;
 	while (running) {
@@ -168,7 +168,7 @@ int Shop::ShopEnter(Hero* hero)
 				case 0:
 					hero->clearattr();
 					//change
-					Resize(NULL,600, 700);
+					Resize(NULL,600*K, 700*K);
 					return 0;
 				case 1:
 					BUY_Enter(hero);
@@ -185,11 +185,11 @@ int Shop::ShopEnter(Hero* hero)
 		}
 		// 绘图
 		cleardevice();					
-		settextstyle(40, 40, "Courier");
-		outtextxy(SIZE / 2 - FONTSIZE * 2, 20, "SHOP");
-		outtextxy(SIZE / 2 - FONTSIZE * 1.5, 120, "BUY");
-		outtextxy(SIZE / 2 - FONTSIZE * 2, 220, "SELL");
-		outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
+		settextstyle(FONTSIZE, FONTSIZE, "Courier");
+		outtextxy(SIZE / 2 - FONTSIZE * 2, 20*K, "SHOP");
+		outtextxy(SIZE / 2 - FONTSIZE * 1.5, 120*K, "BUY");
+		outtextxy(SIZE / 2 - FONTSIZE * 2, 220*K, "SELL");
+		outtextxy(SIZE / 2 - FONTSIZE * 2, 320*K, "EXIT");
 
 		FlushBatchDraw();				
 		DWORD endTime = GetTickCount();				// 记录循环结束时间
@@ -288,8 +288,8 @@ int Shop::BUY_Enter(Hero* hero)
 		// 绘图
 		product_draw(0,hero);
 		if(Prop_choose)		draw_Props(Prop_choose,x,y);
-		settextstyle(40, 40, "Courier");
-		outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
+		settextstyle(BLOCKSIZE, BLOCKSIZE, "Courier");
+		//outtextxy(SIZE / 2 - FONTSIZE * 2, 320*K, "EXIT");
 		FlushBatchDraw();				// 刷新批量绘图
 		DWORD endTime = GetTickCount();				// 记录循环结束时间
 		DWORD elapsedTime = endTime - beginTime;	// 计算循环耗时
@@ -310,8 +310,8 @@ Props* Shop::choose(int x, int y, bool flag)
 		if (p[i]->getflag()==flag)
 		{
 
-			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
-			item_y1 = 100 * index_c;
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100 * index*K;
+			item_y1 = 100 * index_c*K;
 			item_x2 = item_x1 + ITEMSIZE;
 			item_y2 = item_y1 + ITEMSIZE;
 			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
@@ -354,6 +354,15 @@ void Shop::restart()
 		{
 			p[i]->changeflag();
 		}
+	}
+}
+Shop::~Shop()
+{
+	vector<Props*>::iterator pos;
+	for (pos = p.begin(); pos != p.end(); pos++)
+	{
+		delete *pos;
+		cout << "delete";
 	}
 }
 
@@ -406,11 +415,11 @@ void SellItem::New_Sell_Enter(Hero* hero)
 
 void SellItem::choose_draw(int index,int x,int y)
 {
-	x = 200;
-	y = 10;
+	x = 200*K;
+	y = 10*K;
 	setbkcolor(RGB(100, 100, 100));
 	settextcolor(WHITE);
-	settextstyle(10, 10, "黑体");
+	settextstyle(10*K, 10*K, "黑体");
 	char t[20];
 	sprintf_s(t, "price:%d", price[index]);
 	outtextxy(x, y, t);
@@ -431,8 +440,8 @@ int SellItem::choose(int x, int y)
 		if (SellItem::flag[i])
 		{
 
-			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
-			item_y1 = 100 * index_c;
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100*K * index;
+			item_y1 = 100 * index_c*K;
 			item_x2 = item_x1 + ITEMSIZE;
 			item_y2 = item_y1 + ITEMSIZE;
 			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
@@ -464,9 +473,9 @@ void SellItem::SellItem_draw( Hero* hero)
 	cleardevice();
 	char temp[20];
 	sprintf_s(temp, "Gold:%d", hero->getGold());
-	settextstyle(10, 10, "黑体");
+	settextstyle(10*K, 10*K, "黑体");
 	settextcolor(WHITE);
-	outtextxy(10, 10, temp);
+	outtextxy(10*K, 10*K, temp);
 	//此函数为绘制商店的物品
 
 	int index = 1;
@@ -478,13 +487,13 @@ void SellItem::SellItem_draw( Hero* hero)
 		{
 			//setbkcolor(RGB(128, 128, 128));
 			setfillcolor(RGB(128, 128, 128));
-			fillrectangle(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index + 80, 100 * index_c + ITEMSIZE);
+			fillrectangle(SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100*K * index, 100 * index_c*K, SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100 * index*K + 80*K, 100 * index_c*K + ITEMSIZE);
 			//if(i!=9)
 			//cout << img[9] <<endl;
 			 //putimage(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, img[i]);
 			if (img[i]!=NULL)
 
-			putimage_alpha(SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index, 100 * index_c, img[i]);
+			putimage_alpha(SIZE / 2 - ITEMSIZE * 0.5 - 300*K + 100 * index*K, K*100 * index_c, img[i]);
 			//setbkcolor(BLACK);
 			index++;
 			if (index == 6)
@@ -494,8 +503,8 @@ void SellItem::SellItem_draw( Hero* hero)
 			}
 		}
 	}
-	settextstyle(40, 40, "Courier");
-	outtextxy(SIZE / 2 - FONTSIZE * 2, 320, "EXIT");
+	settextstyle(FONTSIZE, FONTSIZE, "Courier");
+	outtextxy(SIZE / 2 - FONTSIZE * 2, 320*K, "EXIT");
 	//FlushBatchDraw();
 }
 
@@ -504,10 +513,10 @@ void SellItem::init()
 	char temp[50];
 	for (int i = 0; i < SELLITEM_SIZE; i++)
 	{
-		flag[i] = 1;
+		flag[i] = 0;
 		img[i] = new IMAGE;
 		sprintf_s(temp,"SellItem\\sellitem (%d).png",i);
-		loadimage(img[i], _T(temp), 80, 80, false);
+		loadimage(img[i], _T(temp), 80*K, 80*K, false);
 	}
 }
 
@@ -516,5 +525,17 @@ void SellItem::restart()
 	for (int i = 0; i < SELLITEM_SIZE; i++)
 	{
 		flag[i] = 0;
+	}
+}
+
+void SellItem::clear()
+{
+	for (int i = 0; i < SELLITEM_SIZE; i++)
+	{
+		if (img[i] != 0)
+		{
+			delete img[i];
+			cout << "clear";
+		}
 	}
 }

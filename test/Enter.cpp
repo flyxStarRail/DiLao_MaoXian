@@ -1,9 +1,10 @@
 #include "Enter.h"
+#include "Shop.h"
 #include <graphics.h>
 
-void Enter::enter()
+void Enter::enter(bool& main_running)
 {
-	Resize(NULL, 600, 600);
+	Resize(NULL, SCREENSIZE, SCREENSIZE);
 	bool running = true;
 	int x = 0;
 	int y = 0;
@@ -25,10 +26,13 @@ void Enter::enter()
 				switch (flag)
 				{
 				case 1:
-					Resize(NULL, 600, 700);
+					Resize(NULL, SCREENSIZE, 700*K);
 					return;
 				case 2:
-					exit(0);
+					//SellItem::clear();
+					main_running = 0;
+					//exit(0);
+					return;
 				case 0:
 					break;
 				default:
@@ -54,22 +58,22 @@ void Enter::enter()
 void Enter::draw()
 {
 	setbkcolor(BLACK);
-	loadimage(NULL, _T("img\\Enter.png"), 600, 600);
+	loadimage(NULL, _T("img\\Enter.png"), SCREENSIZE, SCREENSIZE);
 	setbkmode(TRANSPARENT);
 	setfillcolor(RGB(128, 128, 128));
-	fillrectangle(300 - 150, 300, 150 + 300, 400);
-	settextstyle(50,45,"黑体");
-	outtextxy(185, 325, _T("Start"));
-	fillrectangle(300 - 150, 450, 150 + 300, 550);
-	outtextxy(210, 475, _T("Exit"));
+	fillrectangle(150*K, 300*K, 450*K, 400*K);
+	settextstyle(50*K,45*K,"黑体");
+	outtextxy(185*K, 325*K, _T("Start"));
+	fillrectangle(150*K, 450*K, 450*K, 550*K);
+	outtextxy(210*K, 475*K, _T("Exit"));
 }
 int Enter::judge(int x,int y)
 {
-	if (x > 150 && x < 450 && y>300 && y < 400)
+	if (x > 150*K && x < 450*K && y>300*K && y < 400*K)
 	{
 		return 1;
 	}
-	if (x > 150 && x < 450 && y>450 && y < 550)
+	if (x > 150*K && x < 450*K && y>450*K && y < 550*K)
 	{
 		return 2;
 	}
@@ -82,20 +86,20 @@ void Win::draw()
 	setbkcolor(RGB(211, 55, 52));
 	setfillcolor(WHITE);
 	setbkmode(TRANSPARENT);
-	settextstyle(50, 45, "黑体");
+	settextstyle(50*K, 45*K, "黑体");
 	settextcolor(RGB(236,191,8));
-	outtextxy(135, 100, _T("YOU WIN"));
+	outtextxy(135*K, 100*K, _T("YOU WIN"));
 	settextcolor(BLACK);
-	fillrectangle(300 - 150, 300, 150 + 300, 400);
-	outtextxy(215, 325, _T("Back"));
-	fillrectangle(300 - 150, 450, 150 + 300, 550);
-	outtextxy(210, 475, _T("Exit"));
+	fillrectangle(150*K, 300*K, 450*K, 400*K);
+	outtextxy(215*K, 325*K, _T("Back"));
+	fillrectangle(150*K, 450*K, 450*K, 550*K);
+	outtextxy(210*K, 475*K, _T("Exit"));
 }
 
 void Win::Animate()
 {
 	bool running = true;
-	int x = -45*7;
+	int x = -45*7*K;
 	while (running)
 	{
 		DWORD beginTime = GetTickCount();			// 记录循环开始时间
@@ -105,12 +109,12 @@ void Win::Animate()
 		cleardevice();
 		setfillcolor(WHITE);
 		setbkmode(TRANSPARENT);
-		settextstyle(50, 45, "黑体");
+		settextstyle(50*K, 45*K, "黑体");
 		settextcolor(RGB(236, 191, 8));
-		outtextxy(x, 100, _T("YOU WIN"));
+		outtextxy(x, 100*K, _T("YOU WIN"));
 		FlushBatchDraw();
-		x += 15;
-		if (x > 135) { running = false; }		
+		x += 15*K;
+		if (x > 135*K) { running = false; }		
 		// 帧延时
 		DWORD endTime = GetTickCount();				// 记录循环结束时间
 		DWORD elapsedTime = endTime - beginTime;	// 计算循环耗时
@@ -121,9 +125,9 @@ void Win::Animate()
 	EndBatchDraw();
 }
 
-void Win::enter()
+void Win::enter(bool & main_running)
 {
-	Resize(NULL, 600, 600);
+	Resize(NULL, SCREENSIZE, SCREENSIZE);
 	bool running = true;
 	int x = 0;
 	int y = 0;
@@ -147,7 +151,11 @@ void Win::enter()
 				case 1:
 					return;
 					break;
+				case 2:
+					main_running = 0;
+					return;
 				}
+				
 			}
 		}
 		cleardevice();								// 清除屏幕
@@ -167,11 +175,12 @@ void Win::enter()
 int Win::judge(int x, int y)
 {
 
-	if (x > 150 && x < 450 && y>450 && y < 550)
+	if (x > 150*K && x < 450*K && y>450*K && y < 550*K)
 	{
-		exit(0);
+		//SellItem::clear();
+		return 2;
 	}
-	if (x > 150 && x < 450 && y>300 && y < 400)
+	if (x > 150*K && x < 450*K && y>300*K && y < 400*K)
 	{
 		return 1;
 	}
@@ -181,6 +190,6 @@ int Win::judge(int x, int y)
 void Failed::draw()
 {
 	cleardevice();
-	settextstyle(80, 50, "宋体");
-	outtextxy(150, 300, _T("FAILED"));
+	settextstyle(80*K, 50*K, "宋体");
+	outtextxy(150*K, 300*K, _T("FAILED"));
 }

@@ -13,7 +13,6 @@ int main() {
 	Salesman::img_init();
 	Enermy::img_init();
 	SellItem::init();
-	
 	int length = 1200;
 	//添加区块链
 	NewAreaList* ar_l[MAP_NUM] = { new MapList(length),new MapList(length) };
@@ -39,37 +38,37 @@ int main() {
 		char str[20];
 		IMAGE* img = new IMAGE;
 		sprintf_s(str, "equip\\prop (%d).png", i + 1);
-		loadimage(img, _T(str), 80, 80);
+		loadimage(img, _T(str), ITEMSIZE, ITEMSIZE);
 		temp->set_img(img);
 		a.add_product(temp);
 	}
 	Props* temp = new Armor(5, 50);
 	IMAGE* armor_img = new IMAGE;
-	loadimage(armor_img, _T("equip\\prop (7).png"), 80, 80);
+	loadimage(armor_img, _T("equip\\prop (7).png"), ITEMSIZE, ITEMSIZE);
 	temp->set_img(armor_img);
 	a.add_product(temp);
 
 	temp = new Armor(10, 100);
 	armor_img = new IMAGE;
-	loadimage(armor_img, _T("equip\\prop (8).png"), 80, 80);
+	loadimage(armor_img, _T("equip\\prop (8).png"), ITEMSIZE, ITEMSIZE);
 	temp->set_img(armor_img);
 	a.add_product(temp);
 
 	temp = new PotionRecover(500, 50);
 	IMAGE* Potion_img = new IMAGE;
-	loadimage(Potion_img, _T("equip\\prop (9).png"), 80, 80);
+	loadimage(Potion_img, _T("equip\\prop (9).png"), ITEMSIZE, ITEMSIZE);
 	temp->set_img(Potion_img);
 	a.add_product(temp);
 	temp = new PotionRecover(1000, 100);
 	Potion_img = new IMAGE;
-	loadimage(Potion_img, _T("equip\\prop (10).png"), 80, 80);
+	loadimage(Potion_img, _T("equip\\prop (10).png"), ITEMSIZE, ITEMSIZE);
 	temp->set_img(Potion_img);
 	a.add_product(temp);
 				// 打开音乐文件，alias指定别名
 	mciSendString(_T("open audio\\fail_bgm.mp3 alias Fail"), 0, 0, 0);
 	mciSendString(_T("open audio\\win_bgm.mp3 alias Win"), 0, 0, 0);
 	
-	initgraph(600, 600);
+	initgraph(SCREENSIZE, SCREENSIZE);
 	HWND hWnd = GetHWnd();						// 获得窗口句柄	
 	SetWindowText(hWnd, _T("求小实大冒险"));
 	
@@ -77,7 +76,8 @@ restart:
 	//游戏入口
 	mciSendString(_T("open audio\\Lawn_bgm.mp3 alias BGM"), 0, 0, 0);
 	mciSendString(_T("play BGM repeat"), 0, 0, 0);
-	Enter::enter();
+	bool running = true;
+	Enter::enter(running);
 	int* x = &(ar->get_screen_x());
 	//添加主角本体、运动属性，并进行绑定
 	Hero body(10,1000,0,300);
@@ -89,7 +89,7 @@ restart:
 	
 
 	//下面是主游戏流程
-	bool running = true;
+	
 	ExMessage msg;
 	//setfillcolor(RGB(128, 128, 128));
 	BeginBatchDraw();
@@ -105,7 +105,7 @@ restart:
 
 		}
 		cleardevice();								// 清除屏幕
-		putimage(-*x, 0, &img); //绘制背景图片
+		putimage(-*x*K, 0, &img); //绘制背景图片
 		hero->move();
 		ar->load(*x /AREASIZE);
 		hero->put_solided();
@@ -132,7 +132,9 @@ restart:
 				mciSendString("seek Win to 500", 0, 0, 0);
 				mciSendString("play Win", NULL, 0, NULL);
 				//Sleep(200);
-				Win::enter();
+				Win::enter(running);
+				if (running == false)
+					return 0;
 				restart(ar, ar_l, index, hero, x);
 				goto restart;
 			}
@@ -150,5 +152,6 @@ restart:
 
 	EndBatchDraw();
 	closegraph();
+	SellItem::clear();
 	return 0;
 }

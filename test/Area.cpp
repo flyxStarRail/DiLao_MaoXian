@@ -3,7 +3,7 @@
 void NewBarrierAttribute::print(int x, int y)
 {
 	setfillcolor(RGB(128, 128, 128));
-	fillrectangle(x, y, x + 40, y + 40);
+	fillrectangle(x, y, x + BLOCKSIZE*K, y + BLOCKSIZE*K);
 }
 
 void NewArea::print()
@@ -18,7 +18,7 @@ void NewArea::print()
 			}
 			if (barr[i][j]->getflag())
 			{
-				barr[i][j]->print(i * 40 - screen_x + AREASIZE * index, j * 40);
+				barr[i][j]->print(i * BLOCKSIZE*K - screen_x*K + AREASIZE * index*K, j * BLOCKSIZE*K);
 			}
 		}
 	}
@@ -38,9 +38,9 @@ void Map::restart()
 }
 bool NewArea::Meet(int x, int y, HeroMoveAttribute* hero)
 {
-	int idx = (x + screen_x) / AREASIZE;
-	int x_block = ((x + screen_x) % AREASIZE) / 40;
-	int y_block = (y) / 40;
+	int idx = (x + screen_x) / (int)AREASIZE;
+	int x_block = ((x + screen_x) % (int)AREASIZE) / (int)BLOCKSIZE;
+	int y_block = (y) / (int)BLOCKSIZE;
 	if (idx != index)
 	{
 		return false;
@@ -66,6 +66,13 @@ NewAreaList::NewAreaList(int length)
 		coll.push_back(new NewArea(screen_x, i));
 	}
 }
+NewAreaList::~NewAreaList()
+{
+	for (int i = 0; i <= size; i++)
+	{
+		delete coll[i];
+	}
+}
 
 void MapList::restart()
 {
@@ -76,7 +83,7 @@ void MapList::restart()
 }
 void NewAreaList::add_Barrier(int x, int y, int index)
 {
-	if (index * AREASIZE + x * 40 >= len)
+	if (index * AREASIZE + x * BLOCKSIZE >= len)
 	{
 		return;
 	}
@@ -84,7 +91,7 @@ void NewAreaList::add_Barrier(int x, int y, int index)
 }
 void MapList::add_Enermy(int x, int y, int index)
 {
-	if (index * AREASIZE + x * 40 >= len)
+	if (index * AREASIZE + x * BLOCKSIZE >= len)
 	{
 		return;
 	}
@@ -92,7 +99,7 @@ void MapList::add_Enermy(int x, int y, int index)
 }
 void MapList::add_Salesman(int x, int y, int index, Salesman* vill)
 {
-	if (index * AREASIZE + x * 40 >= len)
+	if (index * AREASIZE + x * BLOCKSIZE >= len)
 	{
 		return;
 	}
@@ -176,10 +183,10 @@ BarrierAttribute::BarrierAttribute(int n1, int n2, int n3, int n4, int& n5)
 BarrierAttribute::BarrierAttribute(int blockx, int blocky, int index, int& n4)
 	:block_x(blockx), block_y(blocky), AreaIndex(index), screen_x(n4)
 {
-	x1 = AREASIZE * AreaIndex + block_x * 40;
-	y1 = block_y * 40;
-	x2 = x1 + 40;
-	y2 = y1 + 40;
+	x1 = AREASIZE * AreaIndex + block_x * BLOCKSIZE;
+	y1 = block_y * BLOCKSIZE;
+	x2 = x1 + BLOCKSIZE;
+	y2 = y1 + BLOCKSIZE;
 }
 
 AreaList::AreaList(int num)

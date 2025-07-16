@@ -3,7 +3,7 @@
 class Enter
 {
 public:
-	static void enter();
+	static void enter(bool&);
 	static int judge(int x, int y);
 	static void draw();
 };
@@ -11,7 +11,7 @@ public:
 class Win
 {
 public:
-	static void enter();
+	static void enter(bool &);
 	static void draw();
 	static int judge(int x,int y);
 	static void Animate();

@@ -5,10 +5,8 @@
 #include <string>
 #include <vector>
 #include "Props.h"
-#define SELLITEM_SIZE 11
-#define ITEMSIZE 80
-#define FONTSIZE 40
-#define SIZE 600
+#include "Macro.h"
+
 
 using namespace std;
 
@@ -25,6 +23,7 @@ public:
 	Props* choose(int,int,bool);
 	void draw_Props(Props*,int,int);
 	void restart();
+	~Shop();
 protected:
 	vector<Props*> p;//商品向量
 };
@@ -44,4 +43,5 @@ public:
 	static void add(int);
 	static void choose_draw(int, int, int);
 	static void restart();
+	static void clear();
 };

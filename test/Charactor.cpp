@@ -73,10 +73,10 @@ CharactorMoveAttribute::CharactorMoveAttribute(int x, int y)
 HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0)
 {
 	isDown = isLeft = isRight = isUp = isSpeed = isdamaged = isAttck = is_img_left = 0;
-	loadimage(&img[0][0], _T("img\\move_0.png"), 40, 40, false);
-	loadimage(&img[0][1], _T("img\\move_1.png"), 40, 40, false);
-	loadimage(&img[1][0], _T("img\\lmove_0.png"), 40, 40, false);
-	loadimage(&img[1][1], _T("img\\lmove_1.png"), 40, 40, false);
+	loadimage(&img[0][0], _T("img\\move_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
+	loadimage(&img[0][1], _T("img\\move_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
+	loadimage(&img[1][0], _T("img\\lmove_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
+	loadimage(&img[1][1], _T("img\\lmove_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 }
 
 void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a)
@@ -173,10 +173,10 @@ void HeroMoveAttribute::put_solided()
 		int n;
 		n = isSpeed ? 3 : 15;
 		t = t % (2 * n);
-		putimage_alpha(x, y, &img[is_img_left][t / n]);
+		putimage_alpha(x*K, y*K, &img[is_img_left][t / n]);
 	}
 	else {
-		putimage_alpha(x, y, &img[is_img_left][0]);
+		putimage_alpha(x*K, y*K, &img[is_img_left][0]);
 	}
 	//putimage(x, y, &img);
 }

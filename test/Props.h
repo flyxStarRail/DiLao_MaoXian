@@ -2,6 +2,7 @@
 #pragma once
 #include <string>
 #include <graphics.h>
+#include <iostream>
 class Hero;
 
 class Product
@@ -42,6 +43,7 @@ public:
     void function(class Hero& hero) override; // 恢复英雄生命
     //void getInfo() const override;
     void getInfo(char* str, int length) const override;
+    ~PotionRecover(){ if (img != NULL)delete img; std::cout << "delete\n"; }
 };
 
 class Weapon : public Props {
@@ -51,6 +53,7 @@ public:
     void function(class Hero& hero) override; // 提高攻击
     //void getInfo() const override;
     void getInfo(char* str, int length) const override;
+    ~Weapon(){ if (img != NULL)delete img; std::cout << "delete\n"; }
 };
 
 class Armor : public Props {
@@ -60,5 +63,5 @@ public:
     void function(class Hero& hero) override; // 提高防御
     //void getInfo() const override;
     void getInfo(char* str, int length) const override;
+    ~Armor() { if (img != NULL)delete img; std::cout << "delete\n"; }
 };
-

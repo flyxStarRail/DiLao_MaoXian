@@ -5,9 +5,9 @@
 #include "Area.h"
 #include "Target.h"
 #include "Enter.h"
+#include "Macro.h"
 #pragma comment(lib, "winmm.lib")
 
-#define MAP_NUM 2
 
 void init_Map_List(NewAreaList* ar_l[MAP_NUM]);
 

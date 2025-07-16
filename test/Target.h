@@ -13,6 +13,7 @@ protected:
     bool flag;
 public:
     Block(bool f) :flag(f) {};
+    virtual ~Block() {};
     void change_flag() { flag = !flag; };
     bool getflag() { return flag; };
     virtual bool interact(Hero* hero) = 0;
@@ -74,6 +75,7 @@ protected:
     static IMAGE* img;
 public:
     Enermy(int atk, int hp, int def = 0) : Person(atk, hp, def),Block(0), full_hp(hp){};
+    ~Enermy(){}
     void print(int x, int y);
     static void img_init();
     bool interact(Hero* hero) override;
@@ -87,6 +89,7 @@ protected:
     Shop* shop;
     static IMAGE* img;
 public:
+    ~Salesman(){}
     void Enter(Hero* hero)
     {
         shop->ShopEnter(hero);

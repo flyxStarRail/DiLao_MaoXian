@@ -1,17 +1,18 @@
 #include "Target.h"
+#include "Macro.h"
 #include <graphics.h>
 // 英雄与敌人交互战斗逻辑（英雄先攻，再敌人反击）
 void Enermy::img_init()
 {
-    loadimage(img, _T("img\\zombie.png"), 40, 40, false);
+    loadimage(img, _T("img\\zombie.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 }
 void  Enermy::print(int x, int y){
     putimage_alpha(x, y, img);
-    fillrectangle(x + 5, y, x + 30, y + 5);
+    fillrectangle(x + 5*K, y, x + 30*K, y + 5*K);
     setfillcolor(RED);
     setlinestyle(PS_NULL,1);
-    fillrectangle(x + 6, y+1, x + 30*hp/full_hp, y + 5);
-    setlinestyle(0, 1);
+    fillrectangle(x + 6*K, y+1*K, x + 30*K*hp/full_hp, y + 5*K);
+    setlinestyle(0, K);
 };
 
 void Enermy::restart()
@@ -69,21 +70,21 @@ void Salesman::restart()
 }
 void Salesman::img_init()
 {
-    loadimage(img, _T("img\\saleman.png"),40 ,40);
+    loadimage(img, _T("img\\saleman.png"),BLOCKSIZE*K ,BLOCKSIZE*K);
 }
 
 void Hero::print()
 {
-    settextstyle(20, 0, _T("Arial"));
+    settextstyle(20*K, 0, _T("Arial"));
     TCHAR buf[50];
     settextcolor(RGB(255, 255, 255));
     //绘制人物属性；
     _stprintf_s(buf, _T("HP: %d"), hp);
-    outtextxy(10, 610, buf);
+    outtextxy(10*K, 610*K, buf);
     _stprintf_s(buf, _T("ATK: %d"), atk);
-    outtextxy(10, 640, buf);
+    outtextxy(10*K, 640*K, buf);
     _stprintf_s(buf, _T("DEF: %d"), def);
-    outtextxy(10, 670, buf);
+    outtextxy(10*K, 670*K, buf);
 }
 bool Hero::win(int end)
 {
