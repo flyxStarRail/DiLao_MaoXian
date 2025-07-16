@@ -29,8 +29,6 @@ protected:
     int atk, def, hp;
 public:
     Person(int atk, int hp, int def) : atk(atk), hp(hp), def(def) {}
-    //virtual ~Person() {}
-    // 虚拟交互由子类实现
     int getAtk() const { return atk; }
     int getDef() const { return def; }
     int getHp() const { return hp; }
@@ -48,7 +46,6 @@ protected:
     int gold;
     bool is_dead = false;
     HeroMoveAttribute* attr;
-    //SellITEM* sold;
 public:
     Hero(int atk, int hp, int def = 0, int gold = 0)
         : Person(atk, hp, def), gold(gold){
@@ -100,6 +97,6 @@ public:
     bool sellItem(Hero* hero);
     void print(int,int);
     void restart();
-    Salesman() :Block(0){};
+    Salesman() :Block(0),shop(nullptr){};
     void static img_init();
 };
