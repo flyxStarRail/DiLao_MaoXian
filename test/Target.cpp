@@ -2,10 +2,6 @@
 #include "Macro.h"
 #include <graphics.h>
 // 英雄与敌人交互战斗逻辑（英雄先攻，再敌人反击）
-
-Block::~Block() {
-}
-
 void Enermy::img_init()
 {
     loadimage(img, _T("img\\zombie.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);

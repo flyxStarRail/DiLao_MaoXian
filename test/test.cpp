@@ -101,7 +101,7 @@ restart:
 		// 消息处理
 		while (peekmessage(&msg))
 		{
-			hero->judge(msg, running, a,*x,*ar, index);
+			hero->judge(msg, running, a);
 
 		}
 		cleardevice();								// 清除屏幕

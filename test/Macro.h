@@ -8,3 +8,4 @@
 #define SIZE 600*K
 #define MAP_NUM 2
 #define SCREENSIZE 600*K
+//用来存放宏定义
