@@ -15,7 +15,9 @@ protected:
 	int x;
 	int y;
 	bool isSpeed;
+	bool isAttck;
 	int step;
+	bool isdamaged;
 public:
 	CharactorMoveAttribute(int x = 0, int y = 0);
 };
@@ -37,11 +39,12 @@ protected:
 	IMAGE img[2][2];
 	NewAreaList* m;//用于链接NewAreaList
 	Hero* body;
+	char c;
 public:
 	void move();//控制移动
 	void link(NewAreaList* temp);
 	HeroMoveAttribute(int x, int y);
-	void judge(ExMessage&, bool&, Shop& a);//判断按键
+	void judge(ExMessage&, bool&, Shop& a, int& screen_x, MapList& ar,int map_index=0);//判断按键
 	void put_solided();//绘制英雄
 	bool isLink() { return islink; };
 	int get_x() { return x; };

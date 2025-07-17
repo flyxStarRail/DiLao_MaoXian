@@ -88,8 +88,8 @@ void Shop::selloperation(int x, int y)
 		if (p[i]->getflag())
 		{
 
-			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 * K - 300 * K + K * 100 * index;
-			item_y1 = 100 * K * index_c;
+			item_x1 = SIZE / 2 - ITEMSIZE * 0.5 - 300 + 100 * index;
+			item_y1 = 100 * index_c;
 			item_x2 = item_x1 + ITEMSIZE;
 			item_y2 = item_y1 + ITEMSIZE;
 			if (x > item_x1 && x<item_x2 && y>item_y1 && y < item_y2)
@@ -112,9 +112,9 @@ void Shop::product_draw(bool product_flag,Hero* hero)
 	cleardevice();
 	char temp[20];
 	sprintf_s(temp, "Gold:%d",hero->getGold());
-	settextstyle(10*K, 10*K, "黑体");
+	settextstyle(10, 10, "黑体");
 	settextcolor(WHITE);
-	outtextxy(10*K, 10*K, temp);
+	outtextxy(10, 10, temp);
 	//此函数为绘制商店的物品
 
 	int index = 1;
@@ -419,7 +419,7 @@ void SellItem::choose_draw(int index,int x,int y)
 	y = 10*K;
 	setbkcolor(RGB(100, 100, 100));
 	settextcolor(WHITE);
-	settextstyle(10*K, 10*K, "黑体");
+	settextstyle(10, 10, "黑体");
 	char t[20];
 	sprintf_s(t, "price:%d", price[index]);
 	outtextxy(x, y, t);
