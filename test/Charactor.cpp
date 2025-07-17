@@ -72,7 +72,7 @@ CharactorMoveAttribute::CharactorMoveAttribute(int x, int y)
 
 HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0)
 {
-	isDown = isLeft = isRight = isUp = isSpeed = isdamaged = isAttck = is_img_left = 0;
+	isDown = isLeft = isRight = isUp = isSpeed  = is_img_left = 0;
 	loadimage(&img[0][0], _T("img\\move_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[0][1], _T("img\\move_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[1][0], _T("img\\lmove_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
