@@ -13,12 +13,13 @@ int main() {
 	Salesman::img_init();
 	Enermy::img_init();
 	SellItem::init();
-	int length = 1200;
+	int length = 0;
 	//添加区块链
-	NewAreaList* ar_l[MAP_NUM] = { new MapList(length),new MapList(length) };
+	vector<NewAreaList*> ar_l;
+	int map_num = 0;
 	int index = 0;
-	NewAreaList * ar = ar_l[0];
-	init_Map_List(ar_l);
+	init_Map_List(ar_l,length,map_num);
+	NewAreaList* ar = ar_l[index];
 	//添加商店
 	Shop a;
 	//添加商人
@@ -101,7 +102,7 @@ restart:
 		// 消息处理
 		while (peekmessage(&msg))
 		{
-			hero->judge(msg, running, a,*x,*ar, index);
+			hero->judge(msg, running, a,*x,*ar, index,ar_l);
 
 		}
 		cleardevice();								// 清除屏幕
@@ -126,7 +127,7 @@ restart:
 		if (body.win(length-10))
 		{
 			index++;
-			if (index == MAP_NUM)
+			if (index == map_num)
 			{
 				mciSendString("close BGM", NULL, 0, NULL);
 				mciSendString("seek Win to 500", 0, 0, 0);

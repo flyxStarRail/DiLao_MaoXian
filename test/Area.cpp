@@ -89,13 +89,13 @@ void NewAreaList::add_Barrier(int x, int y, int index)
 	}
 	coll[index]->add_Barrier(x, y);
 }
-void MapList::add_Enermy(int x, int y, int index)
+void MapList::add_Enermy(int x, int y, int index, int atk , int hp)
 {
 	if (index * AREASIZE + x * BLOCKSIZE >= len)
 	{
 		return;
 	}
-	coll[index]->add_Enermy(x, y);
+	coll[index]->add_Enermy(x, y,atk,hp);
 }
 void MapList::add_Salesman(int x, int y, int index, Salesman* vill)
 {

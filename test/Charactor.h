@@ -44,7 +44,7 @@ public:
 	void move();//¿ØÖÆÒÆ¶¯
 	void link(NewAreaList* temp);
 	HeroMoveAttribute(int x, int y);
-	void judge(ExMessage&, bool&, Shop& a, int& screen_x, MapList& ar,int map_index=0);//ÅÐ¶Ï°´¼ü
+	void judge(ExMessage&, bool&, Shop& a, int& screen_x, MapList& ar,int map_index, vector<MapList*>& ar_l);//ÅÐ¶Ï°´¼ü
 	void put_solided();//»æÖÆÓ¢ÐÛ
 	bool isLink() { return islink; };
 	int get_x() { return x; };

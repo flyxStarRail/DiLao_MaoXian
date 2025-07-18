@@ -1,6 +1,7 @@
 #include "Charactor.h"
 #include "Area.h"
 #include "Target.h"
+#include <fstream>
 void putimage_alpha(int x, int y, IMAGE* img)
 {
 	//函数用来显示透明图像
@@ -79,12 +80,12 @@ HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y)
 	loadimage(&img[1][1], _T("img\\lmove_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 }
 
-void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a,int& screen_x,MapList& ar, int map_index)
+void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a,int& screen_x,MapList& ar, int map_index,vector<MapList*>& ar_l)
 {
 	if (msg.message == WM_LBUTTONDOWN)
 	{
-		int _x = msg.x + screen_x;
-		int _y = msg.y ;
+		int _x = msg.x/K + screen_x;
+		int _y = msg.y/K ;
 		int temp_row = _x % 600 / 40;
 		int temp_col = _y / 40;
 		int index = _x / 600;
@@ -107,6 +108,20 @@ void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a,int& screen
 	//该函数用来判断此时按下的是什么键
 	if (msg.message == WM_KEYDOWN)			// 按下按键处理
 	{
+		if (msg.vkcode == 'P'|| msg.vkcode == 'p')
+		{
+			ifstream map_init("map\\map.txt");
+			int map_num;
+			int len;
+			map_init >> map_num >> len;
+			ofstream fout("map\\map.txt");
+			fout << map_num << ' ' << len << endl;
+			for (int i = 0; i < map_num; i++)
+			{
+				ar_l[i]->out(i,fout);
+			}
+			fout << -1;
+		}
 		
 		switch (msg.vkcode)
 		{
@@ -139,10 +154,6 @@ void HeroMoveAttribute::judge(ExMessage& msg, bool& running, Shop& a,int& screen
 		case 'h':
 		case 'H':
 			isSpeed = 1;
-			break;
-		case 'P':
-		case 'p':
-			ar.out(map_index);
 			break;
 
 		case VK_ESCAPE:

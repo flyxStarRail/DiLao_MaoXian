@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Props.h"
 #include "Charactor.h"
+#include <fstream>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ public:
     //virtual bool interactor() = 0;
     virtual void print(int x, int y) = 0;
     virtual void restart() { if (!flag) { flag = 1; } };
-    virtual void out(int ,int ,int,int) = 0;
+    virtual void out(int ,int ,int,int, ofstream&) = 0;
 };
 
 typedef Block Target;
@@ -81,8 +82,9 @@ public:
     static void img_init();
     bool interact(Hero* hero) override;
     void restart();
-    void out(int x, int y, int index,int map_index)
-    {
+    void out(int x, int y, int index,int map_index ,ofstream & fout)
+    { 
+        fout << (int)1 << ' ' << x << ' ' << y << ' ' << index <<' '<< map_index <<' '<< atk << ' ' << hp << endl;
         printf("ar[%d]->add_Enermy(%d,%d,%d);\n", map_index, x, y, index);
     }
 };
@@ -107,7 +109,7 @@ public:
     Salesman() :Block(0){};
     ~Salesman() {};
     void static img_init();
-    void out(int x, int y, int index,int map_index)
+    void out(int x, int y, int index,int map_index, ofstream& fout)
     {
     }
 };

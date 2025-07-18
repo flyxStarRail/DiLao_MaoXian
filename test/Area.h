@@ -2,9 +2,7 @@
 #include "Charactor.h"
 #include "Target.h"
 #include "Macro.h"
-
-
-
+#include "fstream"
 
 class NewBarrierAttribute
 	:public Block
@@ -14,8 +12,9 @@ public:
 	NewBarrierAttribute() :Block(false) {};
 	void print(int x, int y);
 	bool interact(Hero* hero) { return false; };
-	void out(int x,int y,int index, int map_index)
+	void out(int x,int y,int index, int map_index, ofstream& fout)
 	{
+		fout << (int)0 << ' ' << x << ' ' << y << ' ' << index << ' ' << map_index << endl;
 		printf("ar[%d]->add_Barrier(%d,%d,%d);\n", map_index,x,y,index);
 	}
 	~NewBarrierAttribute(){}
@@ -49,7 +48,7 @@ public:
 		}
 		barr[x][y] = new NewBarrierAttribute;
 		barr[x][y]->change_flag(); };
-	void add_Enermy(int x, int y,int atk = 100,int hp = 100) {
+	void add_Enermy(int x, int y,int atk,int hp) {
 		/*if (barr[x][y])
 		{
 			delete[] barr[x][y];
@@ -84,7 +83,7 @@ public:
 		}
 		barr[x][y] = NULL;
 	}
-	void out(int map_index = 0)
+	void out(int map_index, ofstream& fout)
 	{
 		for (int i = 0; i < 15; i++)
 		{
@@ -93,7 +92,7 @@ public:
 				//barr[i][j] = new NewBarrierAttribute;
 				if (barr[i][j] != NULL)
 				{
-					barr[i][j]->out(i,j,index,map_index);
+					barr[i][j]->out(i,j,index,map_index,fout);
 				}
 			}
 		}
@@ -114,7 +113,7 @@ public:
 	NewAreaList(int length);
 	~NewAreaList();
 	void add_Barrier(int x,int y,int index);
-	void add_Enermy(int x, int y, int index);
+	void add_Enermy(int x, int y, int index, int atk = 100, int hp = 100);
 	void add_Salesman(int x, int y, int index,Salesman* vill);
 	void load(int);
 	bool Meet();
@@ -130,11 +129,11 @@ public:
 		}
 		coll[index]->erasor(x, y);
 	};
-	void out(int map_index)
+	void out(int map_index, ofstream& fout)
 	{
 		for (int i = 0; i <= size; i++)
 		{
-			coll[i]->out(map_index);
+			coll[i]->out(map_index,fout);
 		}
 	}
 	//int& get_screen_x() { return screen_x; };
