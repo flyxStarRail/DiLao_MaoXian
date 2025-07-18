@@ -5,6 +5,56 @@ void NewBarrierAttribute::print(int x, int y)
 	setfillcolor(RGB(128, 128, 128));
 	fillrectangle(x, y, x + BLOCKSIZE*K, y + BLOCKSIZE*K);
 }
+void NewBarrierAttribute::out(int x, int y, int index, int map_index, ofstream& fout)
+{
+	fout << (int)0 << ' ' << x << ' ' << y << ' ' << index << ' ' << map_index << endl;
+	printf("ar[%d]->add_Barrier(%d,%d,%d);\n", map_index, x, y, index);
+}
+
+NewArea::NewArea(int& x, int idx) :screen_x(x), index(idx) {
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			//barr[i][j] = new NewBarrierAttribute;
+			barr[i][j] = NULL;
+		}
+	}
+};
+NewArea::~NewArea()
+{
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			//barr[i][j] = new NewBarrierAttribute;
+			if (barr[i][j] != NULL)
+			{
+				delete barr[i][j];
+			}
+		}
+	}
+}
+void NewArea::add_Barrier(int x, int y) {
+	if (barr[x][y])
+	{
+		delete barr[x][y];
+	}
+	barr[x][y] = new NewBarrierAttribute;
+	barr[x][y]->change_flag();
+};
+void Map::add_Enermy(int x, int y, int atk, int hp) {
+	if (barr[x][y])
+	{
+		delete[] barr[x][y];
+	}
+	barr[x][y] = new Enermy(atk, hp);
+	barr[x][y]->change_flag();
+};
+void Map::add_Salesman(int x, int y, Salesman* vill) {
+	barr[x][y] = vill;
+	barr[x][y]->change_flag();
+};
 
 void NewArea::print()
 {
@@ -36,6 +86,28 @@ void Map::restart()
 		}
 	}
 }
+void Map::erasor(int x, int y)
+{
+	if (barr[x][y])
+	{
+		delete barr[x][y];
+	}
+	barr[x][y] = NULL;
+}
+void Map::out(int map_index, ofstream& fout)
+{
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			//barr[i][j] = new NewBarrierAttribute;
+			if (barr[i][j] != NULL)
+			{
+				barr[i][j]->out(i, j, index, map_index, fout);
+			}
+		}
+	}
+}
 bool NewArea::Meet(int x, int y, HeroMoveAttribute* hero)
 {
 	int idx = (x + screen_x) / (int)AREASIZE;
@@ -58,7 +130,7 @@ bool NewArea::Meet(int x, int y, HeroMoveAttribute* hero)
 }
 
 NewAreaList::NewAreaList(int length)
-	:islink(false),len(length),screen_x(0)
+	:islink(false),len(length),screen_x(0),hero(nullptr)
 {
 	size = (length + AREASIZE - 1) / AREASIZE;
 	for (int i = 0; i <= size; i++)

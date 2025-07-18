@@ -15,9 +15,7 @@ protected:
 	int x;
 	int y;
 	bool isSpeed;
-	bool isAttck;
 	int step;
-	bool isdamaged;
 public:
 	CharactorMoveAttribute(int x = 0, int y = 0);
 };

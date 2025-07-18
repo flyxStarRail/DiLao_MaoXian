@@ -116,11 +116,7 @@ restart:
 			mciSendString("close BGM", NULL, 0, NULL);
 			Failed::draw();
 			FlushBatchDraw();
-			
 			mciSendString("play Fail wait", NULL, 0, NULL);
-			//mciSendString("play Fail", NULL, 0, NULL);
-			//Sleep(2500);
-			//*x = 0;
 			restart(ar, ar_l, index, hero, x);
 			goto restart;
 		}

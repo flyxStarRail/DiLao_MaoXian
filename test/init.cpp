@@ -29,12 +29,12 @@ void init_Map_List(vector<NewAreaList*>& ar,int & length,int & _map_num)
 		{
 		case 0:
 			ar[map_index]->add_Barrier(x,y,index);
-			cout << "ar[" << map_index << "]->add_Barrier(" << x<<"," << y<<"," <<index<<"); \n";
+			//cout << "ar[" << map_index << "]->add_Barrier(" << x<<"," << y<<"," <<index<<"); \n";
 			break;
 		case 1:
 			map_init >> atk >> hp;
 			ar[map_index]->add_Enermy(x, y, index,atk,hp);
-			cout << "ar[" << map_index << "]->add_Enermy(" << x << "," << y << "," << index << "); \n";
+			//cout << "ar[" << map_index << "]->add_Enermy(" << x << "," << y << "," << index << "); \n";
 			break;
 		}
 		map_init >> n;

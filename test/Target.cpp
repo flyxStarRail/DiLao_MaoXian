@@ -24,7 +24,11 @@ void Enermy::restart()
     flag = 1;
     hp = full_hp;
 }
-
+void Enermy::out(int x, int y, int index, int map_index, ofstream& fout)
+{
+    fout << (int)1 << ' ' << x << ' ' << y << ' ' << index << ' ' << map_index << ' ' << atk << ' ' << hp << endl;
+    printf("ar[%d]->add_Enermy(%d,%d,%d);\n", map_index, x, y, index);
+}
 bool Enermy::interact(Hero* hero) {
     int damage = hero->getAtk() - def;
     if (damage > 0) {

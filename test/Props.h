@@ -23,7 +23,7 @@ protected:
     int data; // 数值
     int price; // 价格
     IMAGE* img;
-    Props(int data, int price) : data(data), price(price) {};
+    Props(int data, int price) : data(data), price(price),img(nullptr){};
 public:
     virtual ~Props() {};
     int getPrice() const { return price; }

@@ -14,10 +14,6 @@ void putimage_alpha(int x, int y, IMAGE* img)
 void HeroMoveAttribute::link(NewAreaList* temp) {
 	islink = true;
 	this->m = temp;
-	//if (m->isLink())
-	//{
-	//	return;
-	//}
 	m->link(this);
 };
 void HeroMoveAttribute::move()
@@ -71,9 +67,9 @@ CharactorMoveAttribute::CharactorMoveAttribute(int x, int y)
 	step = 5;
 }
 
-HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0),c(0)
+HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0),c(0),body(nullptr),m(nullptr)
 {
-	isDown = isLeft = isRight = isUp = isSpeed = isdamaged = isAttck = is_img_left = 0;
+	isDown = isLeft = isRight = isUp = isSpeed  = is_img_left = 0;
 	loadimage(&img[0][0], _T("img\\move_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[0][1], _T("img\\move_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
 	loadimage(&img[1][0], _T("img\\lmove_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
