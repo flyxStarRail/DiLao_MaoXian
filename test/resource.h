@@ -2,6 +2,7 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 test.rc 使用
 //
+#pragma once
 #define IDB_PNG1                        101
 
 // Next default values for new objects

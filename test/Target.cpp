@@ -1,19 +1,26 @@
 #include "Target.h"
-#include "Macro.h"
 #include <graphics.h>
 // ”¢–€”Îµ–»ÀΩªª•’Ω∂∑¬ﬂº≠£®”¢–€œ»π•£¨‘Ÿµ–»À∑¥ª˜£©
 void Enermy::img_init()
 {
-    loadimage(img, _T("img\\zombie.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
+    loadimage(img.get(), _T("img\\zombie.png"), static_cast<int>(BLOCKSIZE * K), static_cast<int>(BLOCKSIZE * K), false);
 }
 void  Enermy::print(int x, int y){
-    putimage_alpha(x, y, img);
+    putimage_alpha(x, y, img.get());
     fillrectangle(x + 5*K, y, x + 30*K, y + 5*K);
     setfillcolor(RED);
     setlinestyle(PS_NULL,1);
     fillrectangle(x + 6*K, y+1*K, x + 30*K*hp/full_hp, y + 5*K);
     setlinestyle(0, K);
 };
+#ifdef MAP_EXPORT
+void Enermy::out(int x, int y, int index, int map_index, ofstream& fout)
+{
+    fout << (int)1 << ' ' << x << ' ' << y << ' ' << index << ' ' << map_index << ' ' << atk << ' ' << hp << endl;
+    //printf("ar[%d]->add_Enermy(%d,%d,%d);\n", map_index, x, y, index);
+}
+#endif // MAP_EXPORT
+
 
 void Enermy::restart()
 {
@@ -27,7 +34,7 @@ bool Enermy::interact(Hero* hero) {
         hp -= damage;  // µ–»ÀµÙ—™
     }
     if (hp <= 0) {
-        std::cout << "µ–»À“—À¿Õˆ" << std::endl;
+        //std::cout << "µ–»À“—À¿Õˆ" << std::endl;
         flag = 0;
         hero->setDef(hero->getDef() + 1);
         SellItem::add(rand() % 10);
@@ -38,7 +45,7 @@ bool Enermy::interact(Hero* hero) {
         hero->setHp(hero->getHp() - damage); // ”¢–€µÙ—™
     }
     if (hero->getHp() <= 0) {
-        std::cout << "”¢–€“—À¿Õˆ" << std::endl;
+        //std::cout << "”¢–€“—À¿Õˆ" << std::endl;
         hero->dead();
         return false;
     }
@@ -62,7 +69,7 @@ bool Salesman::sellItem(Hero* hero) {
 
 void Salesman::print(int x,int y)
 {
-    putimage_alpha(x, y, img);
+    putimage_alpha(x, y, img.get());
 }
 void Salesman::restart()
 {
@@ -70,7 +77,7 @@ void Salesman::restart()
 }
 void Salesman::img_init()
 {
-    loadimage(img, _T("img\\saleman.png"),BLOCKSIZE*K ,BLOCKSIZE*K);
+    loadimage(img.get(), _T("img\\saleman.png"), BLOCKSIZE * K, BLOCKSIZE * K);
 }
 
 void Hero::print()

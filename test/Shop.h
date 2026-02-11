@@ -15,7 +15,7 @@ class Shop
 public:
 	int ShopEnter(Hero* hero);//商店入口
 	int BUY_Enter(Hero* hero);//购买界面
-	int SELL_Enter(Hero* hero);//出售界面
+	int SELL_Enter(Hero* hero);//出售界面(弃用)
 	void add_product(Props*);//商店添加产品
 	void buyoperation(int, int,Hero*);//判断点击的位置是否购买
 	void selloperation(int, int);//判断点击的位置是否出售
@@ -32,7 +32,7 @@ class SellItem
 {
 private:
 	static int price[SELLITEM_SIZE];
-	static IMAGE* img[SELLITEM_SIZE];
+	static unique_ptr<IMAGE[]> img;
 	static int flag[SELLITEM_SIZE];
 public:
 	static void init();

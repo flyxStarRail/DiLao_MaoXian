@@ -2,8 +2,14 @@
 #include "Charactor.h"
 #include "Target.h"
 #include "Macro.h"
+#include <fstream>
 
-
+struct loc
+{
+	int x;
+	int y;
+	loc(int a, int b) :x(a), y(b) {};
+};
 
 
 class NewBarrierAttribute
@@ -14,6 +20,9 @@ public:
 	NewBarrierAttribute() :Block(false) {};
 	~NewBarrierAttribute(){}
 	void print(int x, int y);
+#ifdef MAP_EXPORT
+	void out(int x, int y, int index, int map_index, ofstream& fout);
+#endif // MAP_EXPORT
 	bool interact(Hero* hero) { return false; };
 };
 
@@ -31,7 +40,7 @@ public:
 		{
 			for (int j = 0; j < 15; j++)
 			{
-				barr[i][j] = NULL;
+				barr[i][j] = nullptr;
 			}
 		}
 	};
@@ -61,14 +70,38 @@ public:
 		{
 			for (int j = 0; j < 15; j++)
 			{
-				//barr[i][j] = new NewBarrierAttribute;
-				if (barr[i][j] != NULL)
+				if (barr[i][j] != nullptr)
 				{
 					delete barr[i][j];
 				}
 			}
 		}
 	}
+#ifdef ERASOR
+	void erasor(int x, int y)
+	{
+		if (barr[x][y]!=nullptr)
+		{
+			delete barr[x][y];
+		}
+		barr[x][y] = nullptr;
+	}
+#endif
+#ifdef MAP_EXPORT
+	void out(int map_index, ofstream& fout) {
+		for (int i = 0; i < 15; i++)
+		{
+			for (int j = 0; j < 15; j++)
+			{
+				if (barr[i][j] != NULL)
+				{
+					barr[i][j]->out(i, j, index, map_index, fout);
+				}
+			}
+		}
+	}
+#endif // MAP_EXPORT
+
 };
 
 
@@ -81,17 +114,40 @@ protected:
 	int len;
 	HeroMoveAttribute * hero;
 	bool islink;
+
 public:
 	NewAreaList(int length);
-	~NewAreaList();
+	~NewAreaList()		;
 	void add_Barrier(int x,int y,int index);
 	void add_Enermy(int x, int y, int index);
+	void add_Enermy(int x, int y, int index, int atk, int hp);
 	void add_Salesman(int x, int y, int index,Salesman* vill);
 	void load(int);
-	bool Meet();
+	void MeetPart(int& x) const;
+	int Meet();
 	bool isLink() { return islink; }
 	int& get_screen_x() { return screen_x; };
 	void link(HeroMoveAttribute*);
 	int get_len() { return len; };
 	void restart();
+#ifdef ERASOR
+	void erasor(int x, int y, int index) {
+		if (index * AREASIZE + x * BLOCKSIZE >= len)
+		{
+			return;
+		}
+		coll[index]->erasor(x, y);
+	};
+#endif
+#ifdef MAP_EXPORT
+	void out(int map_index, ofstream& fout)
+	{
+		for (int i = 0; i <= size; i++)
+		{
+			coll[i]->out(map_index, fout);
+		}
+	}
+#endif // MAP_EXPORT
+
+
 };

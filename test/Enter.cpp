@@ -1,5 +1,6 @@
 #include "Enter.h"
 #include "Shop.h"
+//#include <winbase.h>
 #include <graphics.h>
 
 void Enter::enter(bool& main_running)
@@ -62,7 +63,7 @@ void Enter::draw()
 	setbkmode(TRANSPARENT);
 	setfillcolor(RGB(128, 128, 128));
 	fillrectangle(150*K, 300*K, 450*K, 400*K);
-	settextstyle(50*K,45*K,"黑体");
+	settextstyle(50 * K, 45 * K, _T("黑体"));
 	outtextxy(185*K, 325*K, _T("Start"));
 	fillrectangle(150*K, 450*K, 450*K, 550*K);
 	outtextxy(210*K, 475*K, _T("Exit"));
@@ -86,7 +87,7 @@ void Win::draw()
 	setbkcolor(RGB(211, 55, 52));
 	setfillcolor(WHITE);
 	setbkmode(TRANSPARENT);
-	settextstyle(50*K, 45*K, "黑体");
+	settextstyle(50 * K, 45 * K, _T("黑体"));
 	settextcolor(RGB(236,191,8));
 	outtextxy(135*K, 100*K, _T("YOU WIN"));
 	settextcolor(BLACK);
@@ -109,7 +110,7 @@ void Win::Animate()
 		cleardevice();
 		setfillcolor(WHITE);
 		setbkmode(TRANSPARENT);
-		settextstyle(50*K, 45*K, "黑体");
+		settextstyle(50 * K, 45 * K, _T("黑体"));
 		settextcolor(RGB(236, 191, 8));
 		outtextxy(x, 100*K, _T("YOU WIN"));
 		FlushBatchDraw();
@@ -190,6 +191,6 @@ int Win::judge(int x, int y)
 void Failed::draw()
 {
 	cleardevice();
-	settextstyle(80*K, 50*K, "宋体");
+	settextstyle(80 * K, 50 * K, _T("宋体"));
 	outtextxy(150*K, 300*K, _T("FAILED"));
 }

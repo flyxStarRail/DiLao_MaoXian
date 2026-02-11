@@ -1,12 +1,15 @@
 ﻿// test.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-#include "init.h"
+#pragma once
+#pragma  warning( disable: 28159)
 
-IMAGE* Salesman::img = new IMAGE;
-IMAGE* Enermy::img = new IMAGE;
+#include "init.h"
+#include<memory>
+using std::make_unique;
+auto Salesman::img = make_unique<IMAGE>();
+auto Enermy::img = make_unique<IMAGE>();
 int SellItem::price[SELLITEM_SIZE] = { 200,20,30,50,10,80,100,30,40,120};      // 可以初始化为你需要的值
-IMAGE* SellItem::img[SELLITEM_SIZE] = { nullptr }; // 初始化为 nullptr
-int SellItem::flag[SELLITEM_SIZE] = { 0 };       // 初始化为 0
+auto SellItem::img = make_unique<IMAGE[]>(10);
+int SellItem::flag[SELLITEM_SIZE] = {};
 
 int main() {
 	//初始化 商人和敌人的贴图
@@ -15,18 +18,20 @@ int main() {
 	SellItem::init();
 	int length = 1200;
 	//添加区块链
-	NewAreaList* ar_l[MAP_NUM] = { new MapList(length),new MapList(length) };
+	//vector<NewAreaList*> ar_l;
+	vector<unique_ptr<NewAreaList>> ar_l;
+	int map_num = 0;
 	int index = 0;
-	NewAreaList * ar = ar_l[0];
-	init_Map_List(ar_l);
+	init_Map_List(ar_l, length, map_num);
+	NewAreaList* ar = (ar_l[index]).get();
 	//添加商店
 	Shop a;
 	//添加商人
-	Salesman vill;
+	Salesman* vill = new Salesman;
 	//给商人绑定商店
-	vill.link(&a);
+	vill->link(&a);
 	//在区块链中添加商人
-	ar_l[0]->add_Salesman(10, 10, 0, &vill);
+	ar_l[0]->add_Salesman(10, 10, 0, vill);
 	
 	IMAGE img;
 	load_background(img,length);
@@ -38,31 +43,20 @@ int main() {
 		char str[20];
 		IMAGE* img = new IMAGE;
 		sprintf_s(str, "equip\\prop (%d).png", i + 1);
-		loadimage(img, _T(str), ITEMSIZE, ITEMSIZE);
-		temp->set_img(img);
+		temp->set_img(str);
 		a.add_product(temp);
 	}
 	Props* temp = new Armor(5, 50);
-	IMAGE* armor_img = new IMAGE;
-	loadimage(armor_img, _T("equip\\prop (7).png"), ITEMSIZE, ITEMSIZE);
-	temp->set_img(armor_img);
+	temp->set_img("equip\\prop (7).png");
 	a.add_product(temp);
-
 	temp = new Armor(10, 100);
-	armor_img = new IMAGE;
-	loadimage(armor_img, _T("equip\\prop (8).png"), ITEMSIZE, ITEMSIZE);
-	temp->set_img(armor_img);
+	temp->set_img("equip\\prop (8).png");
 	a.add_product(temp);
-
 	temp = new PotionRecover(500, 50);
-	IMAGE* Potion_img = new IMAGE;
-	loadimage(Potion_img, _T("equip\\prop (9).png"), ITEMSIZE, ITEMSIZE);
-	temp->set_img(Potion_img);
+	temp->set_img("equip\\prop (9).png");
 	a.add_product(temp);
 	temp = new PotionRecover(1000, 100);
-	Potion_img = new IMAGE;
-	loadimage(Potion_img, _T("equip\\prop (10).png"), ITEMSIZE, ITEMSIZE);
-	temp->set_img(Potion_img);
+	temp->set_img("equip\\prop (10).png");
 	a.add_product(temp);
 				// 打开音乐文件，alias指定别名
 	mciSendString(_T("open audio\\fail_bgm.mp3 alias Fail"), 0, 0, 0);
@@ -101,22 +95,29 @@ restart:
 		// 消息处理
 		while (peekmessage(&msg))
 		{
+#ifndef MAP_EXPORT
 			hero->judge(msg, running, a);
+#endif // !MAP_EXPORT
+
+			
+#ifdef MAP_EXPORT
+			hero->judge(msg, running, a, ar_l);
+#endif // MAP_EXPORT
 
 		}
 		cleardevice();								// 清除屏幕
-		putimage(-*x*K, 0, &img); //绘制背景图片
+		putimage(static_cast<int>(-*x * K), 0, &img); //绘制背景图片
 		hero->move();
 		ar->load(*x /AREASIZE);
 		hero->put_solided();
 		body.print();
 		if (body.get_is_dead())
 		{
-			mciSendString("close BGM", NULL, 0, NULL);
+			mciSendString(_T("close BGM"), NULL, 0, NULL);
 			Failed::draw();
 			FlushBatchDraw();
 			
-			mciSendString("play Fail wait", NULL, 0, NULL);
+			mciSendString(_T("play Fail wait"), NULL, 0, NULL);
 			//mciSendString("play Fail", NULL, 0, NULL);
 			//Sleep(2500);
 			//*x = 0;
@@ -128,9 +129,9 @@ restart:
 			index++;
 			if (index == MAP_NUM)
 			{
-				mciSendString("close BGM", NULL, 0, NULL);
-				mciSendString("seek Win to 500", 0, 0, 0);
-				mciSendString("play Win", NULL, 0, NULL);
+				mciSendString(_T("close BGM"), NULL, 0, NULL);
+				mciSendString(_T("seek Win to 500"), 0, 0, 0);
+				mciSendString(_T("play Win"), NULL, 0, NULL);
 				//Sleep(200);
 				Win::enter(running);
 				if (running == false)
@@ -152,6 +153,6 @@ restart:
 
 	EndBatchDraw();
 	closegraph();
-	SellItem::clear();
+	ar = nullptr;
 	return 0;
 }

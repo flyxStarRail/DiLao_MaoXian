@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <fstream>
+#include <format>
 #include "Props.h"
 #include "Charactor.h"
 
@@ -20,6 +22,9 @@ public:
     //virtual bool interactor() = 0;
     virtual void print(int x, int y) = 0;
     virtual void restart() { if (!flag) { flag = 1; } };
+#ifdef MAP_EXPORT
+    virtual void out(int x, int y, int index, int map_index, ofstream& fout) = 0;
+#endif // MAP_EXPORT
 };
 
 typedef Block Target;
@@ -45,14 +50,19 @@ protected:
     int SellItemID[10] = { 0 };
     int gold;
     bool is_dead = false;
+    bool interact_lock = false;
     HeroMoveAttribute* attr;
 public:
     Hero(int atk, int hp, int def = 0, int gold = 0)
         : Person(atk, hp, def), gold(gold){
     }
     bool interact(Target* target) {
+        if (interact_lock == true) return false;
+        lock_interact();
         return target->interact(this);
     }
+    void lock_interact(){ interact_lock = true; }
+    void release_interact() { interact_lock = false; };
     void dead() { is_dead = true; };
     bool get_is_dead() { return is_dead; };
     void link_attr(HeroMoveAttribute* temp) { attr = temp; };
@@ -69,14 +79,18 @@ class Enermy : public Person,virtual public Block
 {
 protected:
     int full_hp;
-    static IMAGE* img;
+    static unique_ptr<IMAGE> img;
 public:
     Enermy(int atk, int hp, int def = 0) : Person(atk, hp, def),Block(0), full_hp(hp){};
-    ~Enermy(){}
+    ~Enermy() { }
     void print(int x, int y);
     static void img_init();
     bool interact(Hero* hero) override;
     void restart();
+#ifdef MAP_EXPORT
+    void out(int x, int y, int index, int map_index, ofstream& fout);
+#endif // MAP_EXPORT
+    
 };
 
 // …Ã»À¿‡
@@ -84,7 +98,7 @@ class Salesman : virtual public Block
 {
 protected:
     Shop* shop;
-    static IMAGE* img;
+    static unique_ptr<IMAGE> img;
 public:
     ~Salesman(){}
     void Enter(Hero* hero)
@@ -99,4 +113,7 @@ public:
     void restart();
     Salesman() :Block(0),shop(nullptr){};
     void static img_init();
+#ifdef MAP_EXPORT
+    void out(int x, int y, int index, int map_index, ofstream& fout) {};
+#endif // MAP_EXPORT
 };

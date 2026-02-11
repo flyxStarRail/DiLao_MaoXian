@@ -30,18 +30,29 @@ protected:
 	bool isMove;
 	bool isLeft;
 	bool isRight;
-	bool isUp;
 	bool isDown;
+	bool isUp;
 	bool islink;
 	bool is_img_left;
+#ifdef DEBUG
+	char c;
+#endif // DEBUG
+
 	IMAGE img[2][2];
-	NewAreaList* m;//用于链接NewAreaList
+	NewAreaList* m;//用于链接NewAreaListattrclear
 	Hero* body;
 public:
+	friend class NewAreaList;
 	void move();//控制移动
 	void link(NewAreaList* temp);
 	HeroMoveAttribute(int x, int y);
-	void judge(ExMessage&, bool&, Shop& a);//判断按键
+#ifndef MAP_EXPORT
+	void judge(ExMessage&, bool&, Shop&);
+#endif // !MAP_EXPORT
+#ifdef MAP_EXPORT
+		void judge(ExMessage&, bool&, Shop&,vector<unique_ptr<NewAreaList>>& ar_l);
+#endif // MAP_EXPORT
+	//判断按键
 	void put_solided();//绘制英雄
 	bool isLink() { return islink; };
 	int get_x() { return x; };
@@ -50,7 +61,7 @@ public:
 	void set_body(Hero*);
 	void attrclear()
 	{
-		isLeft = isRight = isDown = isUp = isMove = isSpeed = 0 ;
+		isLeft = isRight = isUp = isDown = isMove = isSpeed = 0 ;
 	};
 	bool win(int end);
 	void position_clear();
