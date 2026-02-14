@@ -27,7 +27,8 @@ void Enter::enter(bool& main_running)
 				switch (flag)
 				{
 				case 1:
-					Resize(NULL, SCREENSIZE, 700*K);
+					//Resize(NULL, SCREENSIZE, 700*K);
+					Resize(NULL,SCREEN_WIDTH, SCREEN_HEIGHT);
 					return;
 				case 2:
 					//SellItem::clear();
@@ -192,5 +193,5 @@ void Failed::draw()
 {
 	cleardevice();
 	settextstyle(80 * K, 50 * K, _T("ËÎÌו"));
-	outtextxy(150*K, 300*K, _T("FAILED"));
+	outtextxy(SCREEN_WIDTH/2-150*K, 300*K, _T("FAILED"));
 }

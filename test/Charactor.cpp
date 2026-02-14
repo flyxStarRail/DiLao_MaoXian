@@ -3,14 +3,6 @@
 #include "Target.h"
 #include <fstream>
 
-void putimage_alpha(int x, int y, IMAGE* img)
-{
-	//函数用来显示透明图像
-	int w = img->getwidth();
-	int h = img->getheight();
-	AlphaBlend(GetImageHDC(NULL), x, y, w, h, GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA });
-}
-
 
 void HeroMoveAttribute::link(NewAreaList* temp) {
 	islink = true;
@@ -45,13 +37,13 @@ void HeroMoveAttribute::move()
 	int real_x = temp_real_x;
 	int screen_temp = screen_x;
 
-	if (x < 50 && isLeft || x > 540 && isRight)
+	if (x < 50 && isLeft || x > DRAW_WIDTH - 60 * K && isRight)
 	{
 		isSpeed = false;
 	}
 
 	step = isSpeed ? 10 : 5;
-	
+
 	//移动
 	real_x += isRight ? step : 0;
 	real_x -= isLeft ? step : 0;
@@ -60,7 +52,7 @@ void HeroMoveAttribute::move()
 	y -= isUp ? step : 0;
 
 	//防止出界
-	
+
 	y = y < 0 ? 0 : y;
 	y = y > 560 ? 560 : y;
 
@@ -68,46 +60,41 @@ void HeroMoveAttribute::move()
 
 	bool isScreenMove = true;
 
-	if (real_x < 200 )
+	//防止屏幕左侧出界
+	if (screen_x <= 0)
 	{
-		isScreenMove = false;
-	}
-
-	int end = m->get_len() - AREASIZE + 50;
-
-	if (screen_x > end)
-	{
-		if(isRight)
-		isScreenMove = false;
-	}
-	else
-	{
-		if (real_x - screen_x < 200 && isRight)
-		{
-			isScreenMove = false;
-		}
-		else if (real_x - screen_x > 400 && isLeft)
-		{
+		screen_x = 0;
+		if (isLeft) {
 			isScreenMove = false;
 		}
 	}
-	
-	
+
+	int end = m->get_len();
+
+	//防止屏幕右侧出界
+	if (screen_x + DRAW_WIDTH > end)
+	{
+		if (isRight)
+			isScreenMove = false;
+	}
 
 
+	if (real_x - screen_x < 200 && isRight)
+	{
+		isScreenMove = false;
+	}
+	else if (real_x - screen_x > DRAW_WIDTH * 2.0 / 3 && isLeft)
+	{
+		isScreenMove = false;
+	}
 
 	int screen_step = isScreenMove ? 5 : 0;
 	screen_x += isRight ? screen_step : 0;
 	screen_x -= isLeft ? screen_step : 0;
 	x = real_x - screen_x;
-	//cout << x << endl;
 	int isMeet = m->Meet();
-	//int isMeet = 0;
 	if (isMeet)
 	{
-		//x > 550 && isLeft ? screen_x = screen_temp : 0;
-		//x < 10 && isRight ? screen_x = screen_temp : 0;
-		//int temp_x = temp_real_x - screen_x;
 
 		if (isMeet & 0b10)
 		{
@@ -128,49 +115,6 @@ void HeroMoveAttribute::move()
 }
 
 
-//void HeroMoveAttribute::move()
-//{
-//	isMove = isLeft || isRight || isDown || isUp;
-//	int temp_y = y;
-//	int& screen_x = m->get_screen_x();
-//	int temp_real_x = x + screen_x;
-//	//用来操作一帧内角色的移动
-//	if (x < 20 && isLeft) isSpeed = false;
-//	int screen_temp = screen_x;
-//	if (x > 550 && isRight) isSpeed = false;
-//	step = isSpeed ? 10 : 5;
-//	x -= isLeft ? step - 5 : 0;
-//	screen_x -= isLeft ? 5 : 0;
-//	screen_x += isRight ? 5 : 0;
-//	x += isRight ? step - 5 : 0;
-//	y += isDown ? step : 0;
-//	y -= isUp ? step : 0;
-//	y = y < 0 ? 0 : y;
-//	y = y > 560 ? 560 : y;
-//	if (screen_x < 0)
-//	{
-//		x += screen_x;
-//		x = x < 0 ? 0 : x;
-//		screen_x = 0;
-//	}
-//	int end = m->get_len() - AREASIZE + 50;
-//	if (screen_x > end )
-//	{
-//		x += screen_x - end;
-//		x = x < 0 ? 0 : x;
-//		screen_x = end;
-//	}
-//	if (m->Meet())
-//	{
-//
-//		x > 550 && isLeft ? screen_x = screen_temp : 0;
-//		x < 10 && isRight ? screen_x = screen_temp : 0;
-//
-//		int temp_x = temp_real_x - screen_x;
-//		x = temp_x;
-//		y = temp_y;
-//	}
-//}
 
 CharactorMoveAttribute::CharactorMoveAttribute(int x, int y)
 	:isSpeed(0)
@@ -180,13 +124,13 @@ CharactorMoveAttribute::CharactorMoveAttribute(int x, int y)
 	step = 5;
 }
 
-HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0),m(nullptr),body(nullptr)
+HeroMoveAttribute::HeroMoveAttribute(int x, int y) :CharactorMoveAttribute(x, y), islink(false), isMove(false), t(0), m(nullptr), body(nullptr)
 {
-	isUp = isLeft = isRight = isDown = isSpeed  = is_img_left = 0;
-	loadimage(&img[0][0], _T("img\\move_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
-	loadimage(&img[0][1], _T("img\\move_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
-	loadimage(&img[1][0], _T("img\\lmove_0.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
-	loadimage(&img[1][1], _T("img\\lmove_1.png"), BLOCKSIZE*K, BLOCKSIZE*K, false);
+	isUp = isLeft = isRight = isDown = isSpeed = is_img_left = 0;
+	loadimage(&img[0][0], _T("img\\move_0.png"), BLOCKSIZE * K, BLOCKSIZE * K, false);
+	loadimage(&img[0][1], _T("img\\move_1.png"), BLOCKSIZE * K, BLOCKSIZE * K, false);
+	loadimage(&img[1][0], _T("img\\lmove_0.png"), BLOCKSIZE * K, BLOCKSIZE * K, false);
+	loadimage(&img[1][1], _T("img\\lmove_1.png"), BLOCKSIZE * K, BLOCKSIZE * K, false);
 }
 
 
@@ -339,12 +283,11 @@ void HeroMoveAttribute::put_solided()
 		int n;
 		n = isSpeed ? 3 : 15;
 		t = t % (2 * n);
-		putimage_alpha(x*K, y*K, &img[is_img_left][t / n]);
+		putimage_alpha(x * K, y * K, &img[is_img_left][t / n]);
 	}
 	else {
-		putimage_alpha(x*K, y*K, &img[is_img_left][0]);
+		putimage_alpha(x * K, y * K, &img[is_img_left][0]);
 	}
-	//putimage(x, y, &img);
 }
 void HeroMoveAttribute::set_body(Hero* temp)
 {
@@ -364,8 +307,4 @@ void HeroMoveAttribute::position_clear()
 {
 	x = 0;
 	y = 0;
-}
-static int screen2ph(int x, int screen_x)
-{
-	return x + screen_x;
 }

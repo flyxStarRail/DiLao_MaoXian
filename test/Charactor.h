@@ -1,5 +1,6 @@
 #pragma once
 #include "Shop.h"
+#include "Tool.h"
 #include <graphics.h>
 #pragma comment(lib, "MSIMG32.LIB")
 class Hero;
@@ -54,7 +55,7 @@ public:
 #endif // MAP_EXPORT
 	//ÅÐ¶Ï°´¼ü
 	void put_solided();//»æÖÆÓ¢ÐÛ
-	bool isLink() { return islink; };
+	bool isLink() const { return islink; };
 	int get_x() { return x; };
 	int get_y() { return y; };
 	Hero* get_body(){ return body; };
@@ -67,4 +68,4 @@ public:
 	void position_clear();
 };
 
-void putimage_alpha(int x, int y, IMAGE* img);
+

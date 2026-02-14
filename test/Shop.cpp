@@ -454,6 +454,11 @@ int SellItem::choose(int x, int y)
 
 void SellItem::selloperation(int index,Hero* hero)
 {
+	cout << index;
+	if (index == -1)
+	{
+		return;
+	}
 	if(flag[index]>0)
 	{
 		flag[index]--;

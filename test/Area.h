@@ -4,14 +4,6 @@
 #include "Macro.h"
 #include <fstream>
 
-struct loc
-{
-	int x;
-	int y;
-	loc(int a, int b) :x(a), y(b) {};
-};
-
-
 class NewBarrierAttribute
 	:public Block
 {
@@ -105,6 +97,13 @@ public:
 };
 
 
+enum class Direction {
+	up = -1,
+	left = -1,  // 与up共享同一个值
+	down = 1,
+	right = 1    // 与down共享同一个值
+};
+
 class NewAreaList
 {
 protected:
@@ -123,7 +122,7 @@ public:
 	void add_Enermy(int x, int y, int index, int atk, int hp);
 	void add_Salesman(int x, int y, int index,Salesman* vill);
 	void load(int);
-	void MeetPart(int& x) const;
+	void MeetPart(int& x, Direction&& n) const;
 	int Meet();
 	bool isLink() { return islink; }
 	int& get_screen_x() { return screen_x; };

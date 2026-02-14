@@ -62,7 +62,7 @@ int main() {
 	mciSendString(_T("open audio\\fail_bgm.mp3 alias Fail"), 0, 0, 0);
 	mciSendString(_T("open audio\\win_bgm.mp3 alias Win"), 0, 0, 0);
 	
-	initgraph(SCREENSIZE, SCREENSIZE);
+	initgraph(SCREEN_WIDTH, SCREEN_HEIGHT);
 	HWND hWnd = GetHWnd();						// 获得窗口句柄	
 	SetWindowText(hWnd, _T("求小实大冒险"));
 	
